@@ -25,7 +25,7 @@ router.get('/getbyAnno/:anno/Socio/:socio', tesseramento.getbyAnnoeSocio);  // ,
 // lettura singolo utente
 router.get('/:id', [authjwt.verifyToken] , tesseramento.getbyid);
 // creazione nuovo utente
-router.post('/create', tesseramento.createNew);    // , [authjwt.verifyToken]
+router.post('/create' , [authjwt.verifyToken], tesseramento.createNew);    // , [authjwt.verifyToken]
 // aggiornamento utente  
 router.put('/updatebyid/:id', [authjwt.verifyToken], tesseramento.updateByid);
 // cancellazione utente

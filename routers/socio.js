@@ -13,11 +13,11 @@ router.use(function (req,res,next){
 
 // lettura tutti gli utenti
 // router.get('/', [authjwt.verifyToken] , socio.getAllsocio);
-router.get('/' , socio.getAll);
+router.get('/' , [authjwt.verifyToken], socio.getAll);
 // lettura singolo utente
-router.get('/:id' , socio.getbyid);    // , [authjwt.verifyToken]
+router.get('/:id', [authjwt.verifyToken] , socio.getbyid);    // 
 // creazione nuovo utente
-router.post('/create', socio.createNew);    // , [authjwt.verifyToken]
+router.post('/create', [authjwt.verifyToken], socio.createNew);    // 
 // aggiornamento utente  
 router.put('/updatebyid/:id', [authjwt.verifyToken], socio.updateByid);
 // cancellazione utente

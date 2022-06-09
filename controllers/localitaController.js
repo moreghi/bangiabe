@@ -2,13 +2,13 @@
 
 const strSql = 'select `t_localitas`.*  ' +
                ' FROM `t_localitas` '
-
+const order = ' order by `t_localitas`.`d_localita`'
 const db = require('../db');
 
 // ------   ok   
 exports.getAll = (req,res)=> {
  
-    let strsql = strSql; // 'select * from t_localitas';
+    let strsql = strSql + order; 
     db.query(strsql,(err,result)=> {
         if(err) {
            res.status(500).send({
@@ -83,6 +83,52 @@ exports.getbyid = (req,res)=> {
 
     });  
 }
+
+
+exports.getbydlocalita = (req,res)=> {
+    
+    let local = req.params.local;
+    
+    const strsql = strSql + " where `t_localitas`.`d_localita` = '" + local + "' ";
+
+    console.log('backend - getbydlocalita - strsql --> ' + strsql);
+  
+   // let strsql = `select * from t_localitas where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,'285 errore il lettura t_localitas for d_localita ' + local);
+
+            res.status(500).send({
+                message: `2 errore il lettura t_localitas for d_localita ${local}- errore: ${err}`,
+                rc: 'kk',
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevate ${result.length}  ------------------------   localita `)
+
+            res.status(200).send({ 
+                message:`situazione attuale per localita: .....  ${local}`,
+                rc: 'ok',
+                data:result[0]
+            });                    
+        }else {
+            console.log(`nessun record presente per nome localita: ${local} `);
+            res.status(200).send({
+                message: `nessun localita presente for localita: ${local}`,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}
+
+
+
 
 // creazione nuovo localita   (post)
 

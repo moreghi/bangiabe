@@ -17,10 +17,15 @@ router.get('/' , localita.getAll);
 // lettura singolo utente
 router.get('/:id' , localita.getbyid);    // , [authjwt.verifyToken]
 // creazione nuovo utente
-router.post('/create', [authjwt.verifyToken], localita.createNew);
+router.post('/create', [authjwt.verifyToken], localita.createNew);   // , [authjwt.verifyToken]
 // aggiornamento utente  
 router.put('/updatebyid/:id', [authjwt.verifyToken], localita.updateByid);
 // cancellazione utente
 router.delete('/deletebyid/:id', [authjwt.verifyToken], localita.delete);
+// per descrizione localita
+router.get('/getbydlocalita/:local' , localita.getbydlocalita);
+
+
+
 
 module.exports = router;
