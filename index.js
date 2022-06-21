@@ -18,6 +18,10 @@ const socioRouter = require('./routers/socio');
 const tesseramentoRouter = require('./routers/tesseramento');
 const bandieragiallaRouter = require('./routers/bandieragialla');
 const localitaRouter = require('./routers/t-locali');
+const sociosearchRouter = require('./routers/sociosearch');
+const adesioneconfirmRouter = require('./routers/adesioneConfirm');
+const quotatesseraRouter = require('./routers/quotatessera');
+
 
 
 // ---------------------------------------------------  importo le rotte  -- tabelle correlate
@@ -56,9 +60,9 @@ app.use('/socio', socioRouter);
 app.use('/tesseramento', tesseramentoRouter);
 app.use('/bangia', bandieragiallaRouter);
 app.use('/tlocalita', localitaRouter);
-
-
-
+app.use('/sociosearch', sociosearchRouter);
+app.use('/adesioneConfirm', adesioneconfirmRouter);
+app.use('/quotatessera', quotatesseraRouter);
 
 
 // tabelle correlate

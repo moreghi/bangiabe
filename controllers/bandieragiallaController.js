@@ -1,4 +1,4 @@
-const strSql = 'select `id`, `nomeAssociazione`, `anno`, `ultimaTessera`, `costoTessera`, `key_utenti_operation`, `created_at`, `updated_at`' +
+const strSql = 'select `bandieragiallas`.* ' +
                 ' FROM `bandieragiallas` ' 
 
 const db = require('../db');
@@ -63,7 +63,7 @@ exports.getbyid = (req,res)=> {
         }
         
         if(result.length>0) {
-            console.log(`rilevati ${result.length}  ------------------------   soci `)
+            console.log(`rilevata ${result.length}  ------------------------   associazione `)
 
             res.status(200).send({ 
                 message:`situazione attuale per associazione id: .....  ${id}`,
@@ -90,16 +90,23 @@ exports.createNew = (req,res)=> {
   
       // creo le variabili dai campi di input
       let id = req.body.id;
-      let nomeAssociazione = req.body.cognome;
+      let nomeassociazione = req.body.nomeassociazione;
+      let email = req.body.email;
+      let indirizzo = req.body.indirizzo;
+      let telefono = req.body.telefono;
+      let cellulare = req.body.cellulare;
+      let codfisc = req.body.codfisc;
+      let piva = req.body.piva;
+      let iban = req.body.iban;
+      let banca = req.body.banca;
       let ultimaTessera = req.body.ultimaTessera;
-      let costoTessera = req.body.costoTessera;
       let key_utenti_operation = req.body.key_utenti_operation;
-  
+      
       let strsql =  `insert into bandieragiallas
-                  (id,nomeAssociazione,ultimaTessera,costoTessera,key_utenti_operation) 
+                  (id,nomeassociazione,email,indirizzo,telefono,cellulare,codfisc,piva,iban,banca,ultimaTessera,key_utenti_operation) 
                   valueS
                   (
-                     ${id},'${nomeAssociazione}',${ultimaTessera},${costoTessera},'${key_utenti_operation}' 
+                     ${id},'${nomeassociazione}','${email}','${indirizzo}','${telefono}','${cellulare}','${codfisc}','${piva}','${iban}','${banca}',${ultimaTessera},'${key_utenti_operation}' 
                   )`;
       
     
@@ -137,15 +144,29 @@ exports.createNew = (req,res)=> {
 
     // definisco le variabili per aggiornamento campi
 
-    let nomeAssociazione = req.body.cognome;
+    let nomeassociazione = req.body.nomeassociazione;
+    let email = req.body.email;
+    let indirizzo = req.body.indirizzo;
+    let telefono = req.body.telefono;
+    let cellulare = req.body.cellulare;
+    let codfisc = req.body.codfisc;
+    let piva = req.body.piva;
+    let iban = req.body.iban;
+    let banca = req.body.banca;
     let ultimaTessera = req.body.ultimaTessera;
-    let costoTessera = req.body.costoTessera;
     let key_utenti_operation = req.body.key_utenti_operation;
     
     let strsql =  `update bandieragiallas set
-                    nomeAssociazione = '${nomeAssociazione}',
+                    nomeassociazione = '${nomeassociazione}',
+                    email = '${email}',
+                    indirizzo = '${indirizzo}',
+                    telefono = '${telefono}',
+                    cellulare = '${cellulare}',
+                    codfisc = '${codfisc}',
+                    piva = '${piva}',
+                    iban = '${iban}',
+                    banca = '${banca}',
                     ultimaTessera = ${ultimaTessera},
-                    costoTessera = ${costoTessera},
                     key_utenti_operation = '${key_utenti_operation}'
                     where id = ${id}`;
 

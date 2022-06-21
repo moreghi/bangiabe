@@ -76,6 +76,9 @@ db.userlevel = require("./models/userlevel.js")(sequelize, Sequelize);
 db.bandieragialla = require("./models/bandieragialla.js")(sequelize, Sequelize);
 db.tesseramento = require("./models/tesseramento.js")(sequelize, Sequelize);
 db.localita = require("./models/t_localita.js")(sequelize, Sequelize);
+db.sociosearch = require("./models/sociosearchs.js")(sequelize, Sequelize);
+db.quotatessra = require("./models/quotatessera.js")(sequelize, Sequelize);
+// db.adesioneconfirmed = require("./models/adesioneconfirmed.js")(sequelize, Sequelize);
 
 // tabelle correlate
 db.truolo = require("./models/t-ruolo.js")(sequelize, Sequelize);

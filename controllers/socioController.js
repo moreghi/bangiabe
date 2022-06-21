@@ -52,7 +52,7 @@ exports.getAll = (req,res)=> {
             console.log('nessun record presente ' + result.length); 
 
             res.status(200).send({ 
-                message: `nessun socio pressente `,
+                message: `nessun socio presente `,
                 rc: 'nf',
                 data:null
             });                    
@@ -109,9 +109,10 @@ exports.getbyid = (req,res)=> {
 
 exports.createNew = (req,res)=> {
     
-    //  console.log(req.body,'Creazione nuovo socio');  // visualizzo la struttura dei campi immessi dall'socio 
+      console.log('Creazione nuovo socio:  ' + JSON.stringify(req.body));  // visualizzo la struttura dei campi immessi dall'socio 
   
       // creo le variabili dai campi di input
+      let stato = req.body.stato;
       let cognome = req.body.cognome;
       let nome = req.body.nome;
       let sesso = req.body.sesso;
@@ -138,10 +139,10 @@ exports.createNew = (req,res)=> {
   */
   
       let strsql =  `insert into socios
-                  (cognome,nome,sesso,locNascita,datanascita,residenza,indirizzo,email,telcasa,cell,tessera,operativo,notesocio,key_utenti_operation) 
+                  (stato,cognome,nome,sesso,locNascita,datanascita,residenza,indirizzo,email,telcasa,cell,tessera,operativo,notesocio,key_utenti_operation) 
                   valueS
                   (
-                     '${cognome}','${nome}','${sesso}','${locNascita}','${datanascita}',${residenza},'${indirizzo}','${email}','${telcasa}','${cell}','${tessera}','${operativo}','${notesocio}','${key_utenti_operation}' 
+                    ${stato},'${cognome}','${nome}','${sesso}','${locNascita}','${datanascita}',${residenza},'${indirizzo}','${email}','${telcasa}','${cell}','${tessera}','${operativo}','${notesocio}','${key_utenti_operation}' 
                   )`;
       
     
@@ -178,7 +179,7 @@ exports.createNew = (req,res)=> {
     let strsql_Inqu = `select * from socios where id= ${id} `;
 
     // definisco le variabili per aggiornamento campi
-
+    let stato = req.body.stato;
     let cognome = req.body.cognome;
     let nome = req.body.nome;
     let sesso = req.body.sesso;
@@ -195,6 +196,7 @@ exports.createNew = (req,res)=> {
     let key_utenti_operation = req.body.key_utenti_operation;
 
     let strsql =  `update socios set
+                    stato = ${stato},
                     cognome = '${cognome}',
                     nome = '${nome}',
                     sesso = '${sesso}',
@@ -443,4 +445,83 @@ exports.getLastid  = (req,res)=> {
 
 } 
 
+exports.cognNomeCellulare = (req,res)=> {
+    
+    let cognome = req.params.cognome;
+    let nome = req.params.nome;
+    let cell = req.params.cell;
+    
+    const strsql = strSql + " where so.`cognome` = '" + cognome + "' and so.`nome` = '" + nome + "' and so.`cell` = '" + cell + "' ";
 
+    console.log('backend - cognNomeCellulare - strsql --> ' + strsql);
+  
+   // let strsql = `select * from socios where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,'2 errore il lettura socios for cognome-nome-cell ' + cognome);
+
+            res.status(500).send({
+                message: `2 errore il lettura socios for cognome ${cognome} and nome ${nome}  and cell ${cell}             - errore: ${err}`,
+                rc: 'kk',
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevati ${result.length}  ------------------------   soci `)
+
+            res.status(200).send({ 
+                message:`situazione attuale per cognome/nome/cell: .....  ${cognome}`,
+                rc: 'ok',
+                data:result[0]
+            });                    
+        }else {
+            console.log(`nessun record presente per cognome/nome/cell: ${cognome} `);
+            res.status(200).send({
+                message: `nessun socio presente for cognome/nome/cell: ${cognome}`,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}
+
+exports.filterSearch = (req,res)=> {
+ 
+    let strsql = req.params.strsql; // 'select * from socios';
+
+    console.log('filterSearch --- ' + strsql);
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+           res.status(500).send({
+                message: `3 errore il lettura all socios con vari filtri - erro: ${err}`,
+                data:null
+            });
+            return;
+        }
+        if(result.length>0) {
+            console.log('lettura tutti i soci con vari filtri' + result.length);  
+
+            console.log(`rilevati ${result.length} soci `)
+            res.status(200).send({ 
+                message:'Situazione attuale soci',
+                rc: 'ok',
+                number:  result.length,
+                data:result
+            });                    
+        }else {
+            console.log('nessun record presente ' + result.length); 
+
+            res.status(200).send({ 
+                message: `nessun socio presente `,
+                rc: 'nf',
+                data:null
+            });                    
+        }
+
+    });
+}

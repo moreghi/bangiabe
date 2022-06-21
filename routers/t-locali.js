@@ -25,6 +25,8 @@ router.delete('/deletebyid/:id', [authjwt.verifyToken], localita.delete);
 // per descrizione localita
 router.get('/getbydlocalita/:local' , localita.getbydlocalita);
 
+// ricerca per lastId    
+router.get('/localitalast/lastid',  localita.getLastLocalitaid);
 
 
 

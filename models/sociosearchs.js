@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Bandieragialla = sequelize.define("bandieragiallas", {
+    const Sociosearchs = sequelize.define("sociosearchs", {
       id:{
             // Sequelize module has INTEGER Data_Type.
           type:Sequelize.INTEGER,
@@ -15,7 +15,27 @@ module.exports = (sequelize, Sequelize) => {
           primaryKey:true
           
       },
-      nomeassociazione: {
+      d_search: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      stato: {
+        type: Sequelize.INTEGER,
+        underscored: 0
+      },
+      tessere: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      localita: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      operativo: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      sesso: {
         type: Sequelize.STRING,
         underscored: 0
       },
@@ -23,40 +43,12 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         underscored: 0
       },
-      indirizzo: {
+      cell: {
         type: Sequelize.STRING,
         underscored: 0
       },
-      telefono: {
+      orderby: {
         type: Sequelize.STRING,
-        underscored: 0
-      },
-      cellulare: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      codfisc: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      piva: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      iban: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      banca: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      ultimaTessera: {
-        type: Sequelize.INTEGER,
-        underscored: 0
-      },
-      costoTessera: {
-        type: Sequelize.FLOAT(7, 2),
         underscored: 0
       },
       key_utenti_operation: {
@@ -76,7 +68,5 @@ module.exports = (sequelize, Sequelize) => {
         underscored: 0,
         freezeTableName: true,
       });
-     return Bandieragialla;
+     return Sociosearchs ;
   };
-
- 

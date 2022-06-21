@@ -25,6 +25,13 @@ router.delete('/deletebyid/:id', [authjwt.verifyToken], socio.delete);
 
 // ricerca per lastId    
 router.get('/Socio/lastid', [authjwt.verifyToken] , socio.getLastid);
+// ricerca per Cognome - Nome - Cellulare    
+router.get('/cognNomeCellulare/:cognome/:nome/:cell' , socio.cognNomeCellulare);
+// ricerca per filtri selettivi utente  
+router.get('/filterSearch/strsql/:strsql' , socio.filterSearch);
+
+
+
 
 module.exports = router;
 

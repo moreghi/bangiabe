@@ -369,4 +369,47 @@ exports.delete = (req,res)=> {
 }  
 
 
+exports.getLastLocalitaid = (req,res)=> {
 
+    let tappo = 9999;
+    let strsql = '';
+
+    console.log('backend ----------------------------- getLastLocalitaid ');
+    
+
+    // strsql =  strSql + ' where `idRuolo_Day` > 0 and `idRuolo_Day` < ' + ruolo;     come da laravel -- controllare
+    strsql =  strSql + ' where `t_localitas`.`id` < ' + tappo + ' order by `t_localitas`.`id` desc';  
+    console.log(`strsql:  ${strsql} `);
+   // let strsql = 'SELECT prodottos.*, t_ruolos.d_ruolo FROM prodottos INNER JOIN t_ruolos ON t_ruolos.id = prodottos.idRuolo WHERE prodottos.idRuolo > 0 ';
+    db.query(strsql,(err,result)=> {
+        if(err) {
+           res.status(500).send({
+                message: `553x errore il lettura all t_localitas - erro: ${err}`,
+                data:null
+            });
+            return;
+        }
+        if(result.length>0) {
+            console.log('abc - lettura localita inserita id' + result.length);  
+
+            console.log(`rilevate ${result.length} localita `)
+            res.status(200).send({ 
+                message:'Situazione attuale ultimo id',
+                rc: 'ok',
+                number:  result.length,
+                data:result[0]
+            });                    
+        }else {
+            console.log('nessun record presente ' + result.length); 
+
+            res.status(200).send({ 
+                message: `nessuna localita presente  !! `,
+                rc: 'nf',
+                data:null
+            });                    
+        }
+
+    });
+
+
+}

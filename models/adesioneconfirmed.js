@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Bandieragialla = sequelize.define("bandieragiallas", {
+    const Adesioneconfirmed = sequelize.define("adesione_confirmeds", {
       id:{
             // Sequelize module has INTEGER Data_Type.
           type:Sequelize.INTEGER,
@@ -15,11 +15,27 @@ module.exports = (sequelize, Sequelize) => {
           primaryKey:true
           
       },
-      nomeassociazione: {
+      cognome: {
         type: Sequelize.STRING,
         underscored: 0
       },
-      email: {
+      nome: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      sesso: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      luogonascita: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      datanascita: {
+        type: Sequelize.STRING,
+        underscored: 0
+      },
+      residenza: {
         type: Sequelize.STRING,
         underscored: 0
       },
@@ -27,36 +43,24 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         underscored: 0
       },
-      telefono: {
+      email: {
         type: Sequelize.STRING,
         underscored: 0
       },
-      cellulare: {
+      telcasa: {
         type: Sequelize.STRING,
         underscored: 0
       },
-      codfisc: {
+      cell: {
         type: Sequelize.STRING,
         underscored: 0
       },
-      piva: {
+      token: {
         type: Sequelize.STRING,
         underscored: 0
       },
-      iban: {
+      codade: {
         type: Sequelize.STRING,
-        underscored: 0
-      },
-      banca: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      ultimaTessera: {
-        type: Sequelize.INTEGER,
-        underscored: 0
-      },
-      costoTessera: {
-        type: Sequelize.FLOAT(7, 2),
         underscored: 0
       },
       key_utenti_operation: {
@@ -76,7 +80,5 @@ module.exports = (sequelize, Sequelize) => {
         underscored: 0,
         freezeTableName: true,
       });
-     return Bandieragialla;
+     return Adesioneconfirmed;
   };
-
- 

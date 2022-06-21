@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Bandieragialla = sequelize.define("bandieragiallas", {
+    const Quotatessera = sequelize.define("quotatesseras", {
       id:{
             // Sequelize module has INTEGER Data_Type.
           type:Sequelize.INTEGER,
@@ -15,48 +15,16 @@ module.exports = (sequelize, Sequelize) => {
           primaryKey:true
           
       },
-      nomeassociazione: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      email: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      indirizzo: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      telefono: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      cellulare: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      codfisc: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      piva: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      iban: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      banca: {
-        type: Sequelize.STRING,
-        underscored: 0
-      },
-      ultimaTessera: {
+      idbg: {
         type: Sequelize.INTEGER,
         underscored: 0
       },
-      costoTessera: {
-        type: Sequelize.FLOAT(7, 2),
+      anno: {
+        type: Sequelize.INTEGER,
+        underscored: 0
+      },
+      importo: {
+        type: Sequelize.FLOAT(5, 2),
         underscored: 0
       },
       key_utenti_operation: {
@@ -76,7 +44,6 @@ module.exports = (sequelize, Sequelize) => {
         underscored: 0,
         freezeTableName: true,
       });
-     return Bandieragialla;
+     return Quotatessera;
   };
 
- 

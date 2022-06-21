@@ -191,7 +191,7 @@ ModelA.findAll({
 
 exports.login = (req, res) => {
 
-    console.log('backend ---------------   login  appena entrato ----- email: ' + req.body.email);
+  //  console.log('backend ---------------   login  appena entrato ----- email: ' + req.body.email);
 
 
 
@@ -230,17 +230,17 @@ exports.login = (req, res) => {
                 expiresIn: expiresToken  // 86400 // 24 hours
               });
         
-      console.log('backend - login --token  originario --------- ' + token1)
+    //  console.log('backend - login --token  originario --------- ' + token1)
       
       
               // moreno 20211203
               
               const data = JSON.stringify(user);
-              console.log('backend - login ---  data' + data);
+         //     console.log('backend - login ---  data' + data);
               var token = jwt.sign({data}, config.secret, {
                 expiresIn: config.expiresIn // 24 hours
               })
-              console.log('backend - login ----------- ' + token);
+        //      console.log('backend - login ----------- ' + token);
 
               res.status(200).send({
                 id: user.id,
