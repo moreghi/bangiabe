@@ -146,7 +146,7 @@ exports.createNew = (req,res)=> {
                   (d_localita,cap,pr,key_utenti_operation) 
                   valueS
                   (
-                     '${d_localita}','${cap}','${pr}','${key_utenti_operation}' 
+                    UPPER('${d_localita}'),'${cap}',UPPER('${pr}'),${key_utenti_operation} 
                   )`;
       
     
@@ -190,10 +190,10 @@ exports.createNew = (req,res)=> {
       let key_utenti_operation = req.body.key_utenti_operation;
 
     let strsql =  `update t_localitas set
-                    d_localita = '${d_localita}',
+                    d_localita = UPPER('${d_localita}'),
                     cap = '${cap}',
-                    pr = '${pr}',
-                    key_utenti_operation = '${key_utenti_operation}'
+                    pr = UPPER('${pr}'),
+                    key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
     // verifico prima l'esistenza del record

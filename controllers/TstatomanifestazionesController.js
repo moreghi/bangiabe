@@ -1,25 +1,21 @@
-// creo i metodi per la gestione dell'utente
+// creo i metodi per la gestione dell'manifestazione
 
 const db = require('../db');
 
 
 exports.getAll = (req,res)=> {
  
-    let strsql = 'select * from t_stato_utentes';
-
-    console.log('tstatoUtente - ' + strsql);
-
-
+    let strsql = 'select * from t_stato_manifestaziones';
     db.query(strsql,(err,result)=> {
         if(err) {
-            console.log(err,'errore il lettura all t_stato_utentes');
+            console.log(err,'errore il lettura all t_stato_manifestaziones');
         }
         if(result.length>0) {
-            console.log('lettura tutti gli stati utente ' + result.length);  
+            console.log('lettura tutti gli stati manifestazione ' + result.length);  
 
-            console.log(`rilevati ${result.length} stati utente `)
+            console.log(`rilevati ${result.length} stati manifestazione `)
             res.send({
-                message:'Situazione attuale stati utente',
+                message:'Situazione attuale stati manifestazione',
                 rc: 'ok',
                 data:result
             });
@@ -38,27 +34,27 @@ exports.getAll = (req,res)=> {
 // lettura singolo Ruolo
 exports.getbyid = (req,res)=> {
     
-    let id = req.params.id;
+    let key = req.params.id;
   
-    let strsql = `select * from t_stato_utentes where id= ${id} `;
+    let strsql = `select * from t_stato_manifestaziones where id= ${key} `;
 
     db.query(strsql,(err,result)=> {
         if(err) {
-            console.log(err,'errore il lettura t_stato_utentes for id ' + id);
+            console.log(err,'errore il lettura t_stato_manifestaziones for key ' + key);
         }
         
         if(result.length>0) {
-            console.log(`rilevati ${result.length}  ------------------------   Stati utente `)
+            console.log(`rilevati ${result.length}  ------------------------   Stati manifestazione `)
             res.send({
-             messagexx:`rilevati ${result.length}  ------- get per id ${id} -------   Stati utente`,
-                message:`situazione attuale per ruolo id: .....  ${id}`,
+             messagexx:`rilevati ${result.length}  ------- get per id ${key} -------   Stati manifestazione`,
+                message:`situazione attuale per ruolo id: .....  ${key}`,
                 rc: 'ok',
                 data:result[0]
             });
         }else {
-            console.log(`nessun record presente per id: ${id} `); 
+            console.log(`nessun record presente per id: ${key} `); 
             res.send({
-                message: `nessun ruolo presente for id: ${id}`,
+                message: `nessun ruolo presente for id: ${key}`,
                 rc: 'nf',
                 data:null
             });
@@ -71,11 +67,12 @@ exports.getbyid = (req,res)=> {
 
 exports.createNew = (req,res)=> {
     
-    //  console.log(req.body,'Creazione nuovo utente');  // visualizzo la struttura dei campi immessi dall'utente 
+    //  console.log(req.body,'Creazione nuovo manifestazione');  // visualizzo la struttura dei campi immessi dall'manifestazione 
   
       // creo le variabili dai campi di input
       let id = req.body.id;
-      let d_stato_utente = req.body.d_stato_utente;
+      let d_stato_manifestazione = req.body.d_stato_manifestazione;
+      let tappo = req.body.tappo;
       let key_utenti_operation = req.body.key_utenti_operation;
   
   /*
@@ -88,17 +85,17 @@ exports.createNew = (req,res)=> {
   
   */
   
-      let strsql =  `insert into t_stato_utentes
-                  (id,d_stato_utente,key_utenti_operation) 
+      let strsql =  `insert into t_stato_manifestaziones
+                  (id,d_stato_manifestazione,tappo,key_utenti_operation) 
                   valueS
                   (
-                    ${id},UPPER'${d_stato_utente}'),${key_utenti_operation} 
+                    ${id} ,UPPER'${d_stato_manifestazione}'),'${tappo}',${key_utenti_operation} 
                   )`;
       
     
       db.query(strsql,(err,result) => {
           if(err) {
-              console.log(err,'errore in registrazione nuovo stato utente su tabella t_stato_utentes ');
+              console.log(err,'errore in registrazione nuovo stato manifestazione su tabella t_stato_manifestaziones ');
           }
           console.log(result, `result ...... Ruolo inserito regolarmente `);
   
@@ -118,52 +115,52 @@ exports.createNew = (req,res)=> {
 
   exports.updateByid = (req,res)=> {  
 
-    let id = req.params.id;
+    let key = req.params.id;
 
-    console.log(req.body,`Modifica Stato utente id ${id}`);  // visualizzo la struttura dei campi immessi dall'utente 
+    console.log(req.body,`Modifica Stato manifestazione id ${key}`);  // visualizzo la struttura dei campi immessi dall'manifestazione 
 
-    // definisco la strsql per lettura utente
+    // definisco la strsql per lettura manifestazione
 
-    let strsql_Inqu = `select * from t_stato_utentes where id= ${id} `;
+    let strsql_Inqu = `select * from t_stato_manifestaziones where id= ${key} `;
 
     // definisco le variabili per aggiornamento campi
 
-    let d_stato_utente = req.body.d_stato_utente;
+    let d_stato_manifestazione = req.body.d_stato_manifestazione;
     let tappo = req.body.tappo;
     let key_utenti_operation = req.body.key_utenti_operation;
 
 
-    let strsql =  `update t_stato_utentes set
-                    d_stato_utente = UPPER'${d_stato_utente}'),
+    let strsql =  `update t_stato_manifestaziones set
+                    d_stato_manifestazione = UPPER('${d_stato_manifestazione}'),
                     tappo = '${tappo}',
                     key_utenti_operation = ${key_utenti_operation}
-                    where id = ${id}`;
+                    where id = ${key}`;
 
     // verifico prima l'esistenza del record
 
      db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'errore il lettura t_stato_utentes for id ' + id);
+            console.log(err,'errore il lettura t_stato_manifestaziones for key ' + key);
             return;
         }
         if(result.length>0) {
                 db.query(strsql,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in aggiornamento stato utente id: ${id}`);
+                        console.log(err,`----- errore in aggiornamento stato manifestazione id: ${key}`);
                         req.flash('error', err);
                         return;
                     } 
                     res.send({ 
-                        message: `Ruolo aggiornato regolarmente ...   ok per  id: ${id} --  `,
+                        message: `Ruolo aggiornato regolarmente ...   ok per  id: ${key} --  `,
                         rc: 'ok',
                         data:result
                     });  
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente stato utente id: ${id} -- aggiornamento non possibile`);
+                    console.log(`----- inesistente stato manifestazione id: ${key} -- aggiornamento non possibile`);
                     res.send({
-                        message: `nessun stato utente presente for id: ${id}  -- aggiornamento non possibile`,
+                        message: `nessun stato manifestazione presente for id: ${key}  -- aggiornamento non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -177,44 +174,44 @@ exports.createNew = (req,res)=> {
 
 exports.updateByid1 = (req,res)=> {
 
-    let id = req.params.id;
+    let key = req.params.id;
 
-    console.log(req.body,`Modifica stato utente id ${id}`);  // visualizzo la struttura dei campi immessi dall'utente 
+    console.log(req.body,`Modifica stato manifestazione id ${key}`);  // visualizzo la struttura dei campi immessi dall'manifestazione 
 
-  // definisco la strsql per lettura utente
+  // definisco la strsql per lettura manifestazione
 
-    let strsql_Inqu = `select * from t_stato_utentes where id= ${id} `;
+    let strsql_Inqu = `select * from t_stato_manifestaziones where id= ${key} `;
     
     // definisco 
    let stato = {
-            d_stato_utente: req.body.d_stato_utente,
+            d_stato_manifestazione: req.body.d_stato_manifestazione,
             tappo: req.body.tappo,
             key_utenti_operation: req.body.key_utenti_operation,
        }
 
  db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'errore il lettura t_stato_utentes for id ' + id);
+            console.log(err,'errore il lettura t_stato_manifestaziones for key ' + key);
             return;
         }
         if(result.length>0) {
-                  db.query('UPDATE t_stato_utentes SET ? WHERE id = ' + req.params.id, stato,(err,result) => {    
+                  db.query('UPDATE t_stato_manifestaziones SET ? WHERE id = ' + req.params.id, stato,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in aggiornamento stato utente id: ${id}`);
+                        console.log(err,`----- errore in aggiornamento stato manifestazione id: ${key}`);
                         req.flash('error', err);
                         return;
                     } 
                     res.send({ 
-                        message: `stato utente aggiornato regolarmente ...   ok per  id: ${id} --  `,
+                        message: `stato manifestazione aggiornato regolarmente ...   ok per  id: ${key} --  `,
                         rc: 'ok',
                         data:result
                     });  
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente stato utente id: ${id} -- aggiornamento non possibile`);
+                    console.log(`----- inesistente stato manifestazione id: ${key} -- aggiornamento non possibile`);
                     res.send({
-                        message: `nessun stato utente presente for id: ${id}  -- aggiornamento non possibile`,
+                        message: `nessun stato manifestazione presente for id: ${key}  -- aggiornamento non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -228,42 +225,42 @@ exports.updateByid1 = (req,res)=> {
 
 exports.delete = (req,res)=> {  
 
-    let id = req.params.id;
+    let key = req.params.id;
 
-    console.log(req.body,`cancellazione stato utente id ${id}`);  // visualizzo la struttura dei campi immessi dall'utente 
+    console.log(req.body,`cancellazione stato manifestazione id ${key}`);  // visualizzo la struttura dei campi immessi dall'manifestazione 
 
-    // definisco la strsql per lettura utente
+    // definisco la strsql per lettura manifestazione
 
-    let strsql_Inqu = `select * from t_stato_utentes where id= ${id} `;
+    let strsql_Inqu = `select * from t_stato_manifestaziones where id= ${key} `;
 
-    let strsql =  `delete from t_stato_utentes  where id = ${id}`;
+    let strsql =  `delete from t_stato_manifestaziones  where id = ${key}`;
                     
 
     // verifico prima l'esistenza del record
 
      db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'errore il lettura t_stato_utentes for id ' + id);
+            console.log(err,'errore il lettura t_stato_manifestaziones for key ' + key);
             return;
         }
         if(result.length>0) {
                 db.query(strsql,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in cancellazkione stato utente id: ${id}`);
+                        console.log(err,`----- errore in cancellazkione stato manifestazione id: ${key}`);
                         req.flash('error', err);
                         return;
                     } 
                     res.send({ 
-                        message: `stato utente  id: ${id} cancellato regolarmente  `,
+                        message: `stato manifestazione  id: ${key} cancellato regolarmente  `,
                         rc: 'ok',
                         data:null
                     });  
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente stato utente id: ${id} -- cancellazione non possibile`);
+                    console.log(`----- inesistente stato manifestazione id: ${key} -- cancellazione non possibile`);
                     res.send({
-                        message: `nessun stato utente presente for id: ${id}  -- cancellazione non possibile`,
+                        message: `nessun stato manifestazione presente for id: ${key}  -- cancellazione non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -273,23 +270,22 @@ exports.delete = (req,res)=> {
 
 }  
 
-
 exports.getLastId = (req,res)=> {
     
-    let strSql = 'select * from t_stato_utentes';
+    let strSql = 'select * from t_stato_manifestaziones';
 
     let tappo = 9999;
     let strsql = '';
 
-    console.log('backend ------- TstatoUtente --------- getLastId ');
+    console.log('backend ----------------------------- getLastId ');
      
-    strsql =  strSql + ' where `t_stato_utentes`.`id` < ' + tappo + ' order by `t_stato_utentes`.`id` desc';  
+    strsql =  strSql + ' where `t_stato_manifestaziones`.`id` < ' + tappo + ' order by `t_stato_manifestaziones`.`id` desc';  
     console.log(`strsql:  ${strsql} `);
  
     db.query(strsql,(err,result)=> {
         if(err) {
            res.status(500).send({
-                message: `tsut-001 errore il lettura all stato Utente - erro: ${err}`,
+                message: `553x errore il lettura all manifestaziones - erro: ${err}`,
                 data:null
             });
             return;  
@@ -297,7 +293,7 @@ exports.getLastId = (req,res)=> {
         if(result.length>0) {
             console.log('abc - lettura ultimo id' + result.length);  
 
-            console.log(`rilevati ${result.length} stati `)
+            console.log(`rilevati ${result.length} tabella Manifestazione  `)
             res.status(200).send({ 
                 message:'Situazione attuale ultimo id',
                 number:  result.length,
@@ -308,7 +304,7 @@ exports.getLastId = (req,res)=> {
             console.log('nessun record presente ' + result.length); 
 
             res.status(200).send({ 
-                message: `nessuno stato utente presente  `,
+                message: `nessuno stato presente  `,
                 rc: 'nf',
                 data:null
             });                    
@@ -318,3 +314,4 @@ exports.getLastId = (req,res)=> {
 
 
 }
+

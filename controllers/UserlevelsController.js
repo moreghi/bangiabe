@@ -119,21 +119,12 @@ exports.createNew = (req,res)=> {
       let UserLevelName = req.body.UserLevelName;
       let key_utenti_operation = req.body.key_utenti_operation;
   
-  /*
-      Attenzione:
-          trovare modalità di controllo se record già inserito
-          - per id con Incremento automatico fare select su un campo unico
-          - per id inserito manualmente fare una select con where = id e abilitare insert se non trovato
-  
-  
-  
-  */
-  
+   
       let strsql =  `insert into userlevels
                   (UserLevelName,key_utenti_operation) 
                   valueS
                   (
-                     '${UserLevelName}','${key_utenti_operation}' 
+                    UPPER'${UserLevelName}'),${key_utenti_operation}
                   )`;
       
     
@@ -174,8 +165,8 @@ exports.createNew = (req,res)=> {
     
 
     let strsql =  `update userlevels set
-                    UserLevelName = '${UserLevelName}',
-                    key_utenti_operation = '${key_utenti_operation}'
+                    UserLevelName = UPPER'${UserLevelName}'),
+                    key_utenti_operation = ${key_utenti_operation}
                     where id = ${key}`;
 
     // verifico prima l'esistenza del record

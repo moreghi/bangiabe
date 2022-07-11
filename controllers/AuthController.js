@@ -693,8 +693,79 @@ exports.confchangePassword = async (req, res) => {
 
   }
 
- 
+  exports.controlemail = (req,res) => {
+    
 
+   
+    // verifico che utente sia effettivo
+ 
+    let email = req.body.email;
+  
+    let strsql = strSql + " where `users`.`email` = '" + email + "' ";
+
+    console.log(`controlemail ------  email : ${req.body.email} ---  strsql  ${strsql}`);  
+    db.query(strsql,(err,result)=> {
+        if(err) {
+           res.status(500).send({
+                message: `3fg errore il lettura all users - erro: ${err}`,
+                data:null
+            });
+            return;
+        }
+        if(result.length>0) {
+           res.status(200).send({
+                  message: `email presente `,
+                  rc: 'ok',
+                  data: result
+                  });
+             return;
+         }  else {
+           res.status(200).send({
+                  message: `email inesistente `,
+                  rc: 'nf',
+                  data: null
+                  });
+                  return;
+          }
+        
+
+
+
+
+
+
+
+ 
+ 
+ /*       versione che non va 
+    ForgotPass.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+      .then(result => {
+        if (!result) {
+          res.status(200).send({
+            message: `email inesistente `,
+            rc: 'nf',
+            data: null
+            });
+            return;
+        }
+        res.status(200).send({
+          message: `email presente `,
+          rc: 'ok',
+          data: result
+          });
+        })
+      .catch(err => {
+          res.status(500).send({ message: err.message });
+        });
+*/
+
+       });
+ 
+  }
 
     
 /*

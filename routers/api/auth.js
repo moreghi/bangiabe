@@ -50,6 +50,10 @@ router.post(
     ],
     auth.forgotpassword
   );
+// per controllare email utente 
+router.post(
+  "/controlemail",auth.controlemail
+);
 
 
   

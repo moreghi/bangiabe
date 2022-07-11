@@ -127,22 +127,12 @@ exports.createNew = (req,res)=> {
       let operativo = req.body.operativo;
       let notesocio = req.body.notesocio;
       let key_utenti_operation = req.body.key_utenti_operation;
-  
-  /*
-      Attenzione:
-          trovare modalità di controllo se record già inserito
-          - per id con Incremento automatico fare select su un campo unico
-          - per id inserito manualmente fare una select con where = id e abilitare insert se non trovato
-  
-  
-  
-  */
-  
+    
       let strsql =  `insert into socios
                   (stato,cognome,nome,sesso,locNascita,datanascita,residenza,indirizzo,email,telcasa,cell,tessera,operativo,notesocio,key_utenti_operation) 
                   valueS
                   (
-                    ${stato},'${cognome}','${nome}','${sesso}','${locNascita}','${datanascita}',${residenza},'${indirizzo}','${email}','${telcasa}','${cell}','${tessera}','${operativo}','${notesocio}','${key_utenti_operation}' 
+                    ${stato},UPPER('${cognome}'),UPPER('${nome}'),'${sesso}','${locNascita}','${datanascita}',${residenza},UPPER('${indirizzo}'),'${email}','${telcasa}','${cell}','${tessera}','${operativo}','${notesocio}','${key_utenti_operation}' 
                   )`;
       
     
@@ -197,13 +187,13 @@ exports.createNew = (req,res)=> {
 
     let strsql =  `update socios set
                     stato = ${stato},
-                    cognome = '${cognome}',
-                    nome = '${nome}',
+                    cognome = UPPER('${cognome}'),
+                    nome = UPPER('${nome}'),
                     sesso = '${sesso}',
                     locNascita = ${locNascita},
                     datanascita = '${datanascita}',
                     residenza = ${residenza},
-                    indirizzo = '${indirizzo}',
+                    indirizzo = UPPER('${indirizzo}'),
                     email = '${email}',
                     telcasa = '${telcasa}',
                     cell = '${cell}',

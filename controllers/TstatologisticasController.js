@@ -1,21 +1,23 @@
-// creo i metodi per la gestione dell'utente
+// creo i metodi per la gestione dell'logistica
 
 const db = require('../db');
+let strSql = 'select * from t_stato_logisticas';
 
+exports.getAll = (req,res)=> {
+     
+    let strsql = strSql;
+    console.log('tstatologistica - ' + strsql);
 
-exports.getAllRuoli = (req,res)=> {
- 
-    let strsql = 'select * from t_ruolos';
     db.query(strsql,(err,result)=> {
         if(err) {
-            console.log(err,'errore il lettura all t_ruolos');
+            console.log(err,'errore il lettura all t_stato_logisticas');
         }
         if(result.length>0) {
-            console.log('lettura tutti i ruoli ' + result.length);  
+            console.log('lettura tutti gli stati logistica ' + result.length);  
 
-            console.log(`rilevati ${result.length} ruoli `)
+            console.log(`rilevati ${result.length} stati logistica `)
             res.send({
-                message:'Situazione attuale Ruoli',
+                message:'Situazione attuale stati logistica',
                 rc: 'ok',
                 data:result
             });
@@ -32,21 +34,21 @@ exports.getAllRuoli = (req,res)=> {
 }
 
 // lettura singolo Ruolo
-exports.getRuolobyid = (req,res)=> {
+exports.getbyid = (req,res)=> {
     
     let id = req.params.id;
-  
-    let strsql = `select * from t_ruolos where id= ${id} `;
-
+    let strsql = strSql +  ' where id= ' + id;
+   
     db.query(strsql,(err,result)=> {
         if(err) {
-            console.log(err,'errore il lettura t_ruolos for id ' + id);       }
+            console.log(err,'errore il lettura t_stato_logisticas for id ' + id);
+        }
         
         if(result.length>0) {
-            console.log(`rilevati ${result.length}  ------------------------   Ruoli `)
+            console.log(`rilevati ${result.length}  ------------------------   Stati logistica `)
             res.send({
-             messagexx:`rilevati ${result.length}  ------- get per id ${id} -------   Ruoli`,
-                message:`situazione attuale per ruolo id: .....  ${id}`,
+             messagexx:`rilevati ${result.length}  ------- get per id ${id} -------   Stati logistica`,
+                message:`situazione attuale per stato id: .....  ${id}`,
                 rc: 'ok',
                 data:result[0]
             });
@@ -64,43 +66,30 @@ exports.getRuolobyid = (req,res)=> {
 
 // creazione nuovo ruolo   (post)
 
-exports.createNewRuolo = (req,res)=> {
+exports.createNew = (req,res)=> {
     
-    //  console.log(req.body,'Creazione nuovo utente');  // visualizzo la struttura dei campi immessi dall'utente 
+    //  console.log(req.body,'Creazione nuovo logistica');  // visualizzo la struttura dei campi immessi dall'logistica 
   
       // creo le variabili dai campi di input
-      let id = req.body.id;
-      let d_ruolo = req.body.d_ruolo;
-      let tappo = req.body.tappo;
+    
+      let d_stato_logistica = req.body.d_stato_logistica;
       let key_utenti_operation = req.body.key_utenti_operation;
-  
-  /*
-      Attenzione:
-          trovare modalità di controllo se record già inserito
-          - per id con Incremento automatico fare select su un campo unico
-          - per id inserito manualmente fare una select con where = id e abilitare insert se non trovato
-  
-  
-  
-  */
-  
-      let strsql =  `insert into t_ruolos
-                  (id,d_ruolo,tappo,key_utenti_operation) 
+    
+      let strsql =  `insert into t_stato_logisticas
+                  (id,d_stato_logistica,key_utenti_operation) 
                   valueS
                   (
-                    ${id},UPPER('${d_ruolo}'),'${tappo}',${key_utenti_operation} 
+                    ${id},UPPER('${d_stato_logistica}'),${key_utenti_operation} 
                   )`;
       
     
       db.query(strsql,(err,result) => {
           if(err) {
-              console.log(err,'errore in registrazione nuovo ruolo su tabella t_ruolos ');
+              console.log(err,'errore in registrazione nuovo stato logistica su tabella t_stato_logisticas ');
           }
           console.log(result, `result ...... Ruolo inserito regolarmente `);
-  
-        
                   res.send({
-                  message: `Ruolo inserito regolarmente `,
+                  message: `Stato logistica inserito regolarmente `,
                   rc: 'ok',
                   data: result
               });
@@ -112,25 +101,24 @@ exports.createNewRuolo = (req,res)=> {
   
   // aggiornamento Ruolo   // metodo 2  -- funziona
 
-  exports.updateRuoloByid = (req,res)=> {  
+  exports.updateByid = (req,res)=> {  
 
     let id = req.params.id;
 
-    console.log(req.body,`Modifica Ruolo id ${id}`);  // visualizzo la struttura dei campi immessi dall'utente 
+    console.log(req.body,`Modifica Stato logistica id ${id}`);  // visualizzo la struttura dei campi immessi dall'logistica 
 
-    // definisco la strsql per lettura utente
+    // definisco la strsql per lettura logistica
 
-    let strsql_Inqu = `select * from t_ruolos where id= ${id} `;
+    let strsql_Inqu = `select * from t_stato_logisticas where id= ${id} `;
 
     // definisco le variabili per aggiornamento campi
 
-    let d_ruolo = req.body.d_ruolo;
-    let tappo = req.body.tappo;
+    let d_stato_logistica = req.body.d_stato_logistica;
     let key_utenti_operation = req.body.key_utenti_operation;
 
-    let strsql =  `update t_ruolos set
-                    d_ruolo = UPPER'${d_ruolo}'),
-                    tappo = '${tappo}',
+
+    let strsql =  `update t_stato_logisticas set
+                    d_stato_logistica = UPPER('${d_stato_logistica}'),
                     key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
@@ -138,13 +126,13 @@ exports.createNewRuolo = (req,res)=> {
 
      db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'errore il lettura t_ruolos for id ' + id);
+            console.log(err,'errore il lettura t_stato_logisticas for id ' + id);
             return;
         }
         if(result.length>0) {
                 db.query(strsql,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in aggiornamento ruolo id: ${id}`);
+                        console.log(err,`----- errore in aggiornamento stato logistica id: ${id}`);
                         req.flash('error', err);
                         return;
                     } 
@@ -156,9 +144,9 @@ exports.createNewRuolo = (req,res)=> {
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente ruolo id: ${id} -- aggiornamento non possibile`);
+                    console.log(`----- inesistente stato logistica id: ${id} -- aggiornamento non possibile`);
                     res.send({
-                        message: `nessun ruolo presente for id: ${id}  -- aggiornamento non possibile`,
+                        message: `nessun stato logistica presente for id: ${id}  -- aggiornamento non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -170,46 +158,46 @@ exports.createNewRuolo = (req,res)=> {
 
 // aggiornamento Ruolo   // metodo 1  -- funziona
 
-exports.updateRuoloByid1 = (req,res)=> {
+exports.updateByid1 = (req,res)=> {
 
     let id = req.params.id;
 
-    console.log(req.body,`Modifica ruolo id ${id}`);  // visualizzo la struttura dei campi immessi dall'utente 
+    console.log(req.body,`Modifica stato logistica id ${id}`);  // visualizzo la struttura dei campi immessi dall'logistica 
 
-  // definisco la strsql per lettura utente
+  // definisco la strsql per lettura logistica
 
-    let strsql_Inqu = `select * from t_ruolos where id= ${id} `;
+    let strsql_Inqu = `select * from t_stato_logisticas where id= ${id} `;
     
     // definisco 
-   let ruolonew = {
-            d_ruolo: req.body.d_ruolo,
+   let stato = {
+            d_stato_logistica: req.body.d_stato_logistica,
             tappo: req.body.tappo,
             key_utenti_operation: req.body.key_utenti_operation,
        }
 
  db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'errore il lettura t_ruolos for id ' + id);
+            console.log(err,'errore il lettura t_stato_logisticas for id ' + id);
             return;
         }
         if(result.length>0) {
-                  db.query('UPDATE t_ruolos SET ? WHERE id = ' + req.params.id, ruolonew,(err,result) => {    
+                  db.query('UPDATE t_stato_logisticas SET ? WHERE id = ' + req.params.id, stato,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in aggiornamento ruolo id: ${id}`);
+                        console.log(err,`----- errore in aggiornamento stato logistica id: ${id}`);
                         req.flash('error', err);
                         return;
                     } 
                     res.send({ 
-                        message: `ruolo aggiornato regolarmente ...   ok per  id: ${id} --  `,
+                        message: `stato logistica aggiornato regolarmente ...   ok per  id: ${id} --  `,
                         rc: 'ok',
                         data:result
                     });  
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente ruolo id: ${id} -- aggiornamento non possibile`);
+                    console.log(`----- inesistente stato logistica id: ${id} -- aggiornamento non possibile`);
                     res.send({
-                        message: `nessun ruolo pressente for id: ${id}  -- aggiornamento non possibile`,
+                        message: `nessun stato logistica presente for id: ${id}  -- aggiornamento non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -221,44 +209,44 @@ exports.updateRuoloByid1 = (req,res)=> {
 
 // cancellazione ruolo
 
-exports.deleteRuolo = (req,res)=> {  
+exports.delete = (req,res)=> {  
 
     let id = req.params.id;
 
-    console.log(req.body,`cancellazione ruolo id ${id}`);  // visualizzo la struttura dei campi immessi dall'utente 
+    console.log(req.body,`cancellazione stato logistica id ${id}`);  // visualizzo la struttura dei campi immessi dall'logistica 
 
-    // definisco la strsql per lettura utente
+    // definisco la strsql per lettura logistica
 
-    let strsql_Inqu = `select * from t_ruolos where id= ${id} `;
+    let strsql_Inqu = `select * from t_stato_logisticas where id= ${id} `;
 
-    let strsql =  `delete from t_ruolos  where id = ${id}`;
+    let strsql =  `delete from t_stato_logisticas  where id = ${id}`;
                     
 
     // verifico prima l'esistenza del record
 
      db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'errore il lettura t_ruolos for id ' + id);
+            console.log(err,'errore il lettura t_stato_logisticas for id ' + id);
             return;
         }
         if(result.length>0) {
                 db.query(strsql,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in cancellazkione ruolo id: ${id}`);
+                        console.log(err,`----- errore in cancellazkione stato logistica id: ${id}`);
                         req.flash('error', err);
                         return;
                     } 
                     res.send({ 
-                        message: `ruolo  id: ${key} cancellato regolarmente  `,
+                        message: `stato logistica  id: ${id} cancellato regolarmente  `,
                         rc: 'ok',
                         data:null
                     });  
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente ruolo id: ${id} -- cancellazione non possibile`);
+                    console.log(`----- inesistente stato logistica id: ${id} -- cancellazione non possibile`);
                     res.send({
-                        message: `nessun ruolo presente for id: ${id}  -- cancellazione non possibile`,
+                        message: `nessun stato logistica presente for id: ${id}  -- cancellazione non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -267,4 +255,5 @@ exports.deleteRuolo = (req,res)=> {
             });  
 
 }  
+
 

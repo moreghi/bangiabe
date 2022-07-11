@@ -21,12 +21,37 @@ const localitaRouter = require('./routers/t-locali');
 const sociosearchRouter = require('./routers/sociosearch');
 const adesioneconfirmRouter = require('./routers/adesioneConfirm');
 const quotatesseraRouter = require('./routers/quotatessera');
-
+const manifRouter = require('./routers/manifestaziones');
+const eventoRouter = require('./routers/eventos');
+const tipobigliettoRouter = require('./routers/t_tipobigliettos');
+const logisticaRouter = require('./routers/logisticas');
+const logsettoreRouter = require('./routers/logsettores');
+const logfilaRouter = require('./routers/logfilas');
+const logfilapostiRouter = require('./routers/logfilapostis');
+const eventosettfilapostiRouter = require('./routers/eventosettfilapostis');
 
 
 // ---------------------------------------------------  importo le rotte  -- tabelle correlate
 const ruoloRouter = require('./routers/t-ruolos');
 const statouserRouter = require('./routers/t_stato_utentes');
+const statomanifRouter = require('./routers/t_stato_manifestaziones')
+const statoeventoRouter = require('./routers/t_stato_eventos')
+const tagliabigliettoRouter = require('./routers/t_taglia_bigliettos')
+const statotagliabigliettoRouter = require('./routers/t_stato_taglia_bigliettos')
+const statologisticaRouter = require('./routers/t_stato_logisticas')
+const tipologisticaRouter = require('./routers/t_tipo_logisticas')
+
+
+
+
+// work
+const elementoRouter = require('./routers/elementos')
+
+
+// per upload images
+const imageRouter = require('./routers/images');
+
+
 
 // per ambiente di sviluppo su localhost
 
@@ -63,11 +88,37 @@ app.use('/tlocalita', localitaRouter);
 app.use('/sociosearch', sociosearchRouter);
 app.use('/adesioneConfirm', adesioneconfirmRouter);
 app.use('/quotatessera', quotatesseraRouter);
+app.use('/manif', manifRouter);
+app.use('/evento', eventoRouter);
+app.use('/ttipobiglietto', tipobigliettoRouter);
+app.use('/logistica', logisticaRouter);
+app.use('/logsettore', logsettoreRouter);
+app.use('/logfila', logfilaRouter);
+app.use('/logfilaposti', logfilapostiRouter);
+app.use('/eventosettfilaposti', eventosettfilapostiRouter);
+
+
 
 
 // tabelle correlate
 app.use('/truolo', ruoloRouter);
 app.use('/tstatoutente', statouserRouter);
+app.use('/tstatomanifestazione', statomanifRouter);
+app.use('/tstatoevento', statoeventoRouter);
+app.use('/ttagliabiglietto', tagliabigliettoRouter);
+app.use('/tstatotagliabiglietto', statotagliabigliettoRouter);
+app.use('/tstatologistica', statologisticaRouter);
+app.use('/ttipologistica', tipologisticaRouter);
+
+
+
+// work
+app.use('/elemento', elementoRouter);
+
+
+// per upload images
+
+app.use('/upload', imageRouter);
 
 // ... Va inserito come ultima rotta 
 app.use(function(req, res, next){

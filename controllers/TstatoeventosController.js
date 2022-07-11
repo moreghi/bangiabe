@@ -1,14 +1,12 @@
 // creo i metodi per la gestione dell'utente
 
 const db = require('../db');
-
+let strSql = 'select * from t_stato_eventos';
 
 exports.getAll = (req,res)=> {
- 
-    let strsql = 'select * from t_stato_utentes';
-
+     
+    let strsql = strSql;
     console.log('tstatoUtente - ' + strsql);
-
 
     db.query(strsql,(err,result)=> {
         if(err) {
@@ -39,9 +37,8 @@ exports.getAll = (req,res)=> {
 exports.getbyid = (req,res)=> {
     
     let id = req.params.id;
-  
-    let strsql = `select * from t_stato_utentes where id= ${id} `;
-
+    let strsql = strSql +  ' where id= ' + id;
+   
     db.query(strsql,(err,result)=> {
         if(err) {
             console.log(err,'errore il lettura t_stato_utentes for id ' + id);
@@ -75,24 +72,14 @@ exports.createNew = (req,res)=> {
   
       // creo le variabili dai campi di input
       let id = req.body.id;
-      let d_stato_utente = req.body.d_stato_utente;
+      let d_stato_evento = req.body.d_stato_evento;
       let key_utenti_operation = req.body.key_utenti_operation;
-  
-  /*
-      Attenzione:
-          trovare modalità di controllo se record già inserito
-          - per id con Incremento automatico fare select su un campo unico
-          - per id inserito manualmente fare una select con where = id e abilitare insert se non trovato
-  
-  
-  
-  */
-  
-      let strsql =  `insert into t_stato_utentes
-                  (id,d_stato_utente,key_utenti_operation) 
+    
+      let strsql =  `insert into t_stato_eventos
+                  (id,d_stato_evento,key_utenti_operation) 
                   valueS
                   (
-                    ${id},UPPER'${d_stato_utente}'),${key_utenti_operation} 
+                    ${id},UPPER('${d_stato_evento}'),${key_utenti_operation} 
                   )`;
       
     
@@ -128,14 +115,12 @@ exports.createNew = (req,res)=> {
 
     // definisco le variabili per aggiornamento campi
 
-    let d_stato_utente = req.body.d_stato_utente;
-    let tappo = req.body.tappo;
+    let d_stato_evento = req.body.d_stato_evento;
     let key_utenti_operation = req.body.key_utenti_operation;
 
 
-    let strsql =  `update t_stato_utentes set
-                    d_stato_utente = UPPER'${d_stato_utente}'),
-                    tappo = '${tappo}',
+    let strsql =  `update t_stato_eventos set
+                    d_stato_evento = UPPER('${d_stato_evento}'),
                     key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
@@ -283,13 +268,13 @@ exports.getLastId = (req,res)=> {
 
     console.log('backend ------- TstatoUtente --------- getLastId ');
      
-    strsql =  strSql + ' where `t_stato_utentes`.`id` < ' + tappo + ' order by `t_stato_utentes`.`id` desc';  
+    strsql =  strSql + ' where `t_stato_eventos`.`id` < ' + tappo + ' order by `t_stato_eventos`.`id` desc';  
     console.log(`strsql:  ${strsql} `);
  
     db.query(strsql,(err,result)=> {
         if(err) {
            res.status(500).send({
-                message: `tsut-001 errore il lettura all stato Utente - erro: ${err}`,
+                message: `tsut-001 errore il lettura all stato evento - erro: ${err}`,
                 data:null
             });
             return;  

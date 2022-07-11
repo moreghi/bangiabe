@@ -13,15 +13,15 @@ getPayload = (token) => {
 
 verifyToken = (req, res, next) => {
 
-  console.log('verifyToken --  Bangia --  req ' + JSON.stringify(req.headers));
+ // console.log('verifyToken --  Bangia --  req ' + JSON.stringify(req.headers));
 
-  console.log('verifyToken - ------------ authorization ----    Bangia ------------------------------------- inizio ' + req.headers['authorization']);
+  // console.log('verifyToken - ------------ authorization ----    Bangia ------------------------------------- inizio ' + req.headers['authorization']);
 
   if(req.headers['authorization'] == null ) {
     res.sendStatus(401);
 } else {
     let bearerHeader = req.headers['authorization'];
-    console.log('midd-jwt -1------------------------  bearerHeader  ---------------- token: ' + bearerHeader);
+   // console.log('midd-jwt -1------------------------  bearerHeader  ---------------- token: ' + bearerHeader);
     const token = bearerHeader.split(' ')[1]
     req.token = token
   //  console.log('midd-jwt -2-- token: ' + token);

@@ -106,7 +106,7 @@ exports.createNew = (req,res)=> {
                   (id,nomeassociazione,email,indirizzo,telefono,cellulare,codfisc,piva,iban,banca,ultimaTessera,key_utenti_operation) 
                   valueS
                   (
-                     ${id},'${nomeassociazione}','${email}','${indirizzo}','${telefono}','${cellulare}','${codfisc}','${piva}','${iban}','${banca}',${ultimaTessera},'${key_utenti_operation}' 
+                     ${id},UPPER('${nomeassociazione}'),'${email}',UPPER('${indirizzo}'),'${telefono}','${cellulare}',UPPER('${codfisc}'),'${piva}',UPPER('${iban}'),UPPER('${banca}'),${ultimaTessera},${key_utenti_operation} 
                   )`;
       
     
@@ -157,17 +157,17 @@ exports.createNew = (req,res)=> {
     let key_utenti_operation = req.body.key_utenti_operation;
     
     let strsql =  `update bandieragiallas set
-                    nomeassociazione = '${nomeassociazione}',
+                    nomeassociazione = UPPER('${nomeassociazione}'),
                     email = '${email}',
-                    indirizzo = '${indirizzo}',
+                    indirizzo = UPPER('${indirizzo}'),
                     telefono = '${telefono}',
                     cellulare = '${cellulare}',
-                    codfisc = '${codfisc}',
+                    codfisc = UPPER('${codfisc}'),
                     piva = '${piva}',
-                    iban = '${iban}',
-                    banca = '${banca}',
+                    iban = UPPER('${iban}'),
+                    banca = UPPER('${banca}'),
                     ultimaTessera = ${ultimaTessera},
-                    key_utenti_operation = '${key_utenti_operation}'
+                    key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
     // verifico prima l'esistenza del record

@@ -78,11 +78,31 @@ db.tesseramento = require("./models/tesseramento.js")(sequelize, Sequelize);
 db.localita = require("./models/t_localita.js")(sequelize, Sequelize);
 db.sociosearch = require("./models/sociosearchs.js")(sequelize, Sequelize);
 db.quotatessra = require("./models/quotatessera.js")(sequelize, Sequelize);
+db.manifestazione = require("./models/manifestazione.js")(sequelize, Sequelize);
+db.evento = require("./models/evento.js")(sequelize, Sequelize);
+db.logistica = require("./models/logistica.js")(sequelize, Sequelize);
+db.logsettore = require("./models/logsettore.js")(sequelize, Sequelize);
+db.logfila = require("./models/logfila.js")(sequelize, Sequelize);
+db.logsettfilaposti = require("./models/logsettfilaposti.js")(sequelize, Sequelize);
+db.eventosettfilaposti = require("./models/eventosettfilaposti.js")(sequelize, Sequelize);
+
+
+
+// work
+db.elemento = require("./models/elemento.js")(sequelize, Sequelize);
 // db.adesioneconfirmed = require("./models/adesioneconfirmed.js")(sequelize, Sequelize);
 
 // tabelle correlate
 db.truolo = require("./models/t-ruolo.js")(sequelize, Sequelize);
 db.tstatoutente = require("./models/t-stato-utente.js")(sequelize, Sequelize);
+db.tstatomanifestazione = require("./models/t-stato-manifestazione.js")(sequelize, Sequelize);
+db.tstatoevento = require("./models/t-stato-evento.js")(sequelize, Sequelize);
+db.ttipobiglietto = require("./models/t-tipo-biglietto.js")(sequelize, Sequelize);
+db.ttagliabiglietto = require("./models/t-taglia-biglietto.js")(sequelize, Sequelize);
+db.tstatotagliabiglietto = require("./models/t-stato-taglia-biglietto.js")(sequelize, Sequelize);
+db.tstatologistica = require("./models/t-stato-logistica.js")(sequelize, Sequelize);
+db.ttipologistica = require("./models/t-tipo-logistica.js")(sequelize, Sequelize);
+
 
 //  ----------------------------------------------------------------------------- relazioni tra tabelle
 // relazione tra Users e Truolo
@@ -105,6 +125,16 @@ db.user.belongsTo(db.tstatoutente, {
   as: "t_stato_utentes",
 });
 
+// ----------------------------------------------  relazioni  Manifestazione
+// relazione tra Manifestazione e Tstatomanifestazione
+// db.truoloday.hasMany(db.user, { as: "users" });  //  originale
+db.tstatomanifestazione.hasMany(db.manifestazione, { as: "Tstatomanifestazione", foreignKey : 'idt'}); 
+db.manifestazione.belongsTo(db.tstatomanifestazione, {
+  foreignKey: "stato",
+  attribute: ["d_stato_manifestazione"],
+  as: "t_stato_manifestaziones",          
+ 
+});
 
 
 

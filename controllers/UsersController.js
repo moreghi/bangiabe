@@ -416,7 +416,7 @@ exports.createNewUser = (req,res)=> {
                   (cognome,nome,photo,idStato,tipoacc,username,password,email,idRuolo,noteUtente,key_utenti_operation) 
                   valueS
                   (
-                     '${cognome}','${nome}','${photo}','${idStato}','${tipoacc}','${username}','${password}','${email}','${idRuolo}','${noteUtente}','${key_utenti_operation}' 
+                    UPPER'${cognome}'),UPPER('${nome}'),'${photo}','${idStato}','${tipoacc}','${username}','${password}','${email}','${idRuolo}',UPPER('${noteUtente}'),${key_utenti_operation} 
                   )`;
       
     
@@ -467,16 +467,16 @@ exports.createNewUser = (req,res)=> {
 
 
     let strsql =  `update users set
-                    cognome = '${cognome}',
-                    nome = '${nome}',
+                    cognome = UPPER('${cognome}'),
+                    nome = UPPER('${nome}'),
                     photo = '${photo}',
                     idStato = '${idStato}',
                     tipoacc = '${tipoacc}',
                     username = '${username}',
                     email = '${email}',
                     idRuolo = '${idRuolo}',
-                    noteUtente = '${noteUtente}',
-                    key_utenti_operation = '${key_utenti_operation}'
+                    noteUtente = UPPER('${noteUtente}'),
+                    key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
     // verifico prima l'esistenza del record
