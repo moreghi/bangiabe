@@ -484,6 +484,149 @@ console.log('totaleko: ' + totaleko);
  
 }
 
+exports.getbyeventoSettFila = (req,res)=> {
+    
+    let id = req.params.id;
+    let sett = req.params.sett; 
+    let fila = req.params.fila;
+    
+    const strsql = strSql + ' where `eventosettfilapostis`.`idEvento` = ' + id + ' and `eventosettfilapostis`.`idSettore` = ' + sett + ' and `eventosettfilapostis`.`idFila` = ' + fila;
+
+    console.log('backend - getbyeventoSettFila - strsql --> ' + strsql);
+  
+   // let strsql = `select * from eventosettfilapostis where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,`2 errore il lettura eventosettfilapostis for id/sett/fila id ${id}-sett ${sett}-fila ${fila}`);
+
+            res.status(500).send({
+                message: `2 errore il lettura eventosettfilapostis for id ${id}-sett ${sett}-fila ${fila} ----- errore: ${err}`,
+                rc: 'kk',
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevata ${result.length}  ------------------------   evento `)
+
+            res.status(200).send({ 
+                message:`situazione attuale per evento id: .....   ${id}-sett ${sett}-fila ${fila}`,
+                rc: 'ok',
+                data:result[0]
+            });                    
+        }else {
+            console.log(`nessun record presente per id:  ${id}-sett ${sett}-fila ${fila} `);
+            res.status(200).send({
+                message: `nessun sett/fila presente for id: ${id}-sett ${sett}-fila ${fila}`,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}
+
+exports.getbyIdEventoSettori = (req,res)=> {
+   
+    let id = req.params.id;
+    let statoattivo = 'ATTIVO';
+      
+    const strSql = "SELECT DISTINCT `logsettores`.* , `logsettores`.`dsettore` " +  
+                   "  FROM `eventosettfilapostis` " + 
+                   " inner join `logsettores` ON `logsettores`.`id` = `eventosettfilapostis`.`idSettore` "; 
+
+    const order =  " order by `eventosettfilapostis`.`idSettore` asc";
+   
+    const strsql = strSql + " where `eventosettfilapostis`.`idEvento` = " + id + " and `eventosettfilapostis`.`utilizzo` = '" + statoattivo + "' "  + order;
+
+    console.log('backend - getbyeventoSettFila - strsql --> ' + strsql);
+  
+   // let strsql = `select * from eventosettfilapostis where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,`2 errore il lettura eventosettori for id/sett id ${id}`);
+
+            res.status(500).send({
+                message: `2 errore il lettura eventosettore for id ${id} ----- errore: ${err}`,
+                rc: 'kk',
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevata ${result.length}  ------------------------   evento `)
+
+            res.status(200).send({ 
+                message:`situazione attuale per evento/settore id: .....   ${id}`,
+                rc: 'ok',
+                data:result
+            });                    
+        }else {
+            console.log(`nessun record presente per id:  ${id} `);
+            res.status(200).send({
+                message: `nessun sett/fila presente for id: ${id}`,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}
+
+
+exports.getbyIdEventofileofSettore = (req,res)=> {
+   
+    let id = req.params.id;
+    let sett = req.params.idsett;
+    
+    const strSql = "SELECT DISTINCT `logfilas`.* , `logfilas`.`dfila` " +  
+                   "  FROM `eventosettfilapostis` " + 
+                   " inner join `logfilas` ON `logfilas`.`id` = `eventosettfilapostis`.`idFila` "; 
+
+    const order =  " order by `eventosettfilapostis`.`idFila` asc";
+   
+    const strsql = strSql + " where `eventosettfilapostis`.`idEvento` = " + id + " and `eventosettfilapostis`.`idSettore` = " + sett +  order;
+
+    console.log('backend - getbyIdEventofileofSettore - strsql --> ' + strsql);
+  
+   // let strsql = `select * from eventosettfilapostis where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,`2 errore il lettura eventosettorifila for id/sett id ${id}`);
+
+            res.status(500).send({
+                message: `2 errore il lettura eventosettorefila for id ${id} ----- errore: ${err}`,
+                rc: 'kk',
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevate ${result.length}  ------------------------   file `)
+
+            res.status(200).send({ 
+                message:`situazione attuale per evento/settore/File id: .....   ${id}`,
+                rc: 'ok',
+                data:result
+            });                    
+        }else {
+            console.log(`nessun record presente per id:  ${id} `);
+            res.status(200).send({
+                message: `nessun sett/fila presente for id: ${id}`,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}
+
 /*
 
     exports.getCountbysettfilacopia = (req,res)=> {

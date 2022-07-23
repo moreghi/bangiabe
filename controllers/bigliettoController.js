@@ -1,5 +1,7 @@
-const strSql = 'select `logsettores`.*  ' +  
-                ' FROM `logsettores` '; 
+const strSql = 'select `bigliettos`.* , `t_stato_bigliettos`.`d_stato_biglietto`, `t_tipo_bigliettos`.* ' +  
+                ' FROM `bigliettos` ' + 
+                ' inner join `t_stato_bigliettos` ON `t_stato_bigliettos`.`id` = `bigliettos`.`stato` ' + 
+                ' inner join `t_tipo_bigliettos` ON `t_tipo_bigliettos`.`id` = `bigliettos`.`tipo` '; 
 
 
 
@@ -8,22 +10,19 @@ const db = require('../db');
 // ------   ok   
 exports.getAll = (req,res)=> {
  
-    let idlog = req.params.idlog;
-
-
-    let strsql = strSql + ' where `logsettores`.`idLogistica` = ' + idlog; // 'select * from logsettores';
+    let strsql = strSql; // 'select * from bigliettos';
     db.query(strsql,(err,result)=> {
         if(err) {
            res.status(500).send({
-                message: `3 errore il lettura all logsettores - erro: ${err}`,
+                message: `3 errore il lettura all bigliettos - erro: ${err}`,
                 data:null
             });
             return;
         }
         if(result.length>0) {
-            console.log('lettura tutti gli logsettori ' + result.length);  
+            console.log('lettura tutti gli eventi ' + result.length);  
 
-            console.log(`rilevati ${result.length} logsettori `)
+            console.log(`rilevati ${result.length} eventi `)
             res.status(200).send({ 
                 message:'Situazione attuale ',
                 rc: 'ok',
@@ -49,18 +48,18 @@ exports.getbyid = (req,res)=> {
     
     let id = req.params.id;
     
-    const strsql = strSql + ' where `logsettores`.`id` = ' + id;
+    const strsql = strSql + ' where `bigliettos`.`id` = ' + id;
 
     console.log('backend - getbyid - strsql --> ' + strsql);
   
-   // let strsql = `select * from logsettores where id= ${id} `;    originale
+   // let strsql = `select * from bigliettos where id= ${id} `;    originale
 
     db.query(strsql,(err,result)=> {
         if(err) {
-            console.log(err,'2 errore il lettura logsettores for id ' + id);
+            console.log(err,'2 errore il lettura bigliettos for id ' + id);
 
             res.status(500).send({
-                message: `2 errore il lettura logsettores for id ${id}- errore: ${err}`,
+                message: `2 errore il lettura bigliettos for id ${id}- errore: ${err}`,
                 rc: 'kk',
                 data:null
             });
@@ -91,39 +90,54 @@ exports.getbyid = (req,res)=> {
 
 exports.createNew = (req,res)=> {
     
-      console.log(req.body,'..........................................   Creazione nuovo settore');  // visualizzo la struttura dei campi immessi dall'evento 
+      console.log(req.body,'..........................................   Creazione nuovo evento');  // visualizzo la struttura dei campi immessi dall'evento 
   
       // creo le variabili dai campi di input
+    
 
-      let idLogistica = req.body.idLogistica;
-      let stato = req.body.stato;
-      let dsettore = req.body.dsettore;
-      let key_utenti_operation = req.body.key_utenti_operation;
       
+      let evento = req.body.evento;
+      let idprenotazione = req.body.idprenotazione;
+      let stato = req.body.stato;
+      let tipo = req.body.tipo;
+      let numero = req.body.numero;
+      let cognome = req.body.cognome;
+      let nome = req.body.nome;
+      let email = req.body.email;
+      let cellulare = req.body.cellulare;
+      let datapre = req.body.datapre;
+      let dataconf = req.body.dataconf;
+      let dataemi = req.body.dataemi;   
+      let settore = req.body.settore;
+      let fila = req.body.fila;
+      let posto = req.body.posto;
+      let key_utenti_operation = req.body.key_utenti_operation;
+    
 
-      console.log('backend ------------ logSettore ---------------------------- Creazione nuovo settore ' + req.body.data );
+      console.log('backend ------------ Biglietto ---------------------- Creazione nuovo biglietto ' + req.body.data );
 
-      let strsql =  `insert into logsettores
-                  (idLogistica,stato,dsettore,key_utenti_operation) 
+
+      let strsql =  `insert into bigliettos
+                  (evento,idprenotazione,stato,tipo,numero,cognome,nome,email,cellulare,datapre,dataconf,dataemi,settore,fila,posto,key_utenti_operation) 
                   valueS
                   (
-                    ${idLogistica},${stato},UPPER('${dsettore}'),${key_utenti_operation} 
+                    ${evento},${idprenotazione},${stato},${tipo},${numero},UPPER('${cognome}'),UPPER('${nome}'),'${email}','${cellulare}','${datapre}','${dataconf}','${dataemi}',${settore},${fila},${posto},${key_utenti_operation} 
                   )`;
       
     
       db.query(strsql,(err,result) => {
           if(err) {
-              console.log(err,'errore in registrazione nuova logSettore su tabella logsettores ');
+              console.log(err,'errore in registrazione nuova biglietto su tabella bigliettos ');
               res.status(500).send({
-                message: `errore in registrazione nuovo logSettore su tabella logsettores - errore: ${err}`,
+                message: `errore in registrazione nuova evento su tabella bigliettos - errore: ${err}`,
                 rc: 'kk',
                 data:null
             });
             return;
           }
-          console.log(result, `result ...... logSettore inserito regolarmente `);
+          console.log(result, `result ...... biglietto inserita regolarmente `);
           res.status(200).send({
-            message: `evento inserita regolarmente`,
+            message: `biglietto inserito regolarmente`,
             rc: 'ok',
             data:result
         });
@@ -141,19 +155,43 @@ exports.createNew = (req,res)=> {
 
     // definisco la strsql per lettura evento
 
-    let strsql_Inqu = `select * from logsettores where id= ${id} `;
+    let strsql_Inqu = `select * from bigliettos where id= ${id} `;
 
     // definisco le variabili per aggiornamento campi
 
-    let idLogistica = req.body.idLogistica;
+    let evento = req.body.evento;
+    let idprenotazione = req.body.idprenotazione;
     let stato = req.body.stato;
-    let dsettore = req.body.dsettore;
+    let tipo = req.body.tipo;
+    let numero = req.body.numero;
+    let cognome = req.body.cognome;
+    let nome = req.body.nome;
+    let email = req.body.email;
+    let cellulare = req.body.cellulare;
+    let datapre = req.body.datapre;
+    let dataconf = req.body.dataconf;
+    let dataemi = req.body.dataemi;   
+    let settore = req.body.settore;
+    let fila = req.body.fila;
+    let posto = req.body.posto;
     let key_utenti_operation = req.body.key_utenti_operation;
     
-    let strsql =  `update logsettores set
-                    idLogistica = ${idLogistica},
+    let strsql =  `update bigliettos set
+                    evento = ${evento},
+                    idprenotazione = ${idprenotazione},
                     stato = ${stato},
-                    dsettore = UPPER('${dsettore}'),
+                    tipo = ${tipo},
+                    numero = ${numero},
+                    cognome = UPPER('${cognome}'),
+                    nome = UPPER('${nome}'),
+                    email = LOWER('${email}'),
+                    cellulare = '${cellulare}',  
+                    datapre = '${datapre}',    
+                    dataconf = '${dataconf}',   
+                    dataemi = '${dataemi}',  
+                    settore = ${settore},
+                    fila = ${fila},
+                    posto = ${posto},
                     key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
@@ -162,9 +200,9 @@ exports.createNew = (req,res)=> {
 
      db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
-            console.log(err,'4 errore il lettura logsettores for key ' + id);
+            console.log(err,'4 errore il lettura bigliettos for key ' + id);
             res.status(500).send({
-                message: `4 errore il lettura logsettores for key ${id} - errore: ${err}`,
+                message: `4 errore il lettura bigliettos for key ${id} - errore: ${err}`,
                 data:null
             });
             return;
@@ -172,26 +210,26 @@ exports.createNew = (req,res)=> {
         if(result.length>0) {
                 db.query(strsql,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in aggiornamento evento id: ${id}`);
+                        console.log(err,`----- errore in aggiornamento biglietto id: ${id}`);
                         res.status(500).send({ 
-                            message: `errore in aggiornamnto evento ${err} --  `,
+                            message: `errore in aggiornamnto biglietto ${err} --  `,
                             rc: 'ko',
                             data:null
                         });  
                         return;
                     } 
-                    console.log(err,`----- aggiornata eventoevento id: ${id}`);
+                    console.log(err,`----- aggiornato biglietto id: ${id}`);
                     res.status(200).send({ 
-                        message: `evento aggiornato regolarmente   `,
+                        message: `biglietto aggiornato regolarmente   `,
                         rc: 'ok',
                         data:result
                     });  
                   });  
                 }  
                 else {
-                    console.log(`----- inesistente evento id: ${id} -- aggiornamento non possibile`);
+                    console.log(`----- inesistente biglietto id: ${id} -- aggiornamento non possibile`);
                     res.status(200).send({ 
-                        message: `nessuna evento presente for id: ${id}  -- aggiornamento non possibile`,
+                        message: `nessun  biglietto presente for id: ${id}  -- aggiornamento non possibile`,
                         rc: 'nf',
                         data:null
                     });
@@ -211,7 +249,7 @@ exports.updateeventoByid1 = (req,res)=> {
 
   // definisco la strsql per lettura evento
 
-    let strsql_Inqu = `select * from logsettores where id= ${id} `;
+    let strsql_Inqu = `select * from bigliettos where id= ${id} `;
     
     // definisco 
    let eventonew = {
@@ -231,7 +269,7 @@ exports.updateeventoByid1 = (req,res)=> {
  db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
             res.status(500).send({ 
-                message: `5 errore il lettura logsettores for key $${err} --  `,
+                message: `5 errore il lettura bigliettos for key $${err} --  `,
                 rc: 'ko',
                 data:null
             });  
@@ -239,11 +277,11 @@ exports.updateeventoByid1 = (req,res)=> {
 
 
 
-            console.log(err,'5 errore il lettura logsettores for key ' + id);
+            console.log(err,'5 errore il lettura bigliettos for key ' + id);
             return;
         }
         if(result.length>0) {
-                  db.query('UPDATE logsettores SET ? WHERE id = ' + req.params.id, eventonew,(err,result) => {    
+                  db.query('UPDATE bigliettos SET ? WHERE id = ' + req.params.id, eventonew,(err,result) => {    
                     if(err) { 
                         console.log(err,`----- errore in aggiornamento evento id: ${id}`);
                         res.status(500).send({ 
@@ -283,9 +321,9 @@ exports.delete = (req,res)=> {
 
     // definisco la strsql per lettura evento
 
-    let strsql_Inqu = `select * from logsettores where id= ${id} `;
+    let strsql_Inqu = `select * from bigliettos where id= ${id} `;
 
-    let strsql =  `delete from logsettores  where id = ${id}`;
+    let strsql =  `delete from bigliettos  where id = ${id}`;
                     
 
     // verifico prima l'esistenza del record
@@ -293,7 +331,7 @@ exports.delete = (req,res)=> {
      db.query(strsql_Inqu,(err,result)=> {  
         if(err) {
             res.status(500).send({
-                message: `errore in lettura logsettores for key ${id} - errore: ${err}`,
+                message: `errore in lettura bigliettos for key ${id} - errore: ${err}`,
                 data:null
             });
             return;
@@ -301,25 +339,25 @@ exports.delete = (req,res)=> {
         if(result.length>0) {
                 db.query(strsql,(err,result) => {    
                     if(err) { 
-                        console.log(err,`----- errore in cancellazkione evento id: ${id}`);
+                        console.log(err,`----- errore in cancellazkione biglietto id: ${id}`);
                         res.status(500).send({ 
-                            message: `errore in cancellazione evento -- ${err} --  `,
+                            message: `errore in cancellazione biglietto -- ${err} --  `,
                             rc: 'ko',
                             data:null
                         });  
                         return;
                     } 
                     res.status(200).send({ 
-                        message: `evento  id: ${id} cancellata regolarmente  `,
+                        message: `biglietto  id: ${id} cancellato regolarmente  `,
                         rc: 'ok',
                         data:null
                     }); 
                  });  
                 }  
                 else {
-                    console.log(`----- inesistente evento id: ${id} -- cancellazione non possibile`);
+                    console.log(`----- inesistente biglietto id: ${id} -- cancellazione non possibile`);
                     res.status(200).send({ 
-                        message: `nessuna evento presente for id: ${id}  -- cancellazione non possibile  `,
+                        message: `nessun biglietto presente for id: ${id}  -- cancellazione non possibile  `,
                         rc: 'nf',
                         data:null
                     });                     
@@ -328,92 +366,4 @@ exports.delete = (req,res)=> {
             });  
 
 }  
-
-exports.getbySettore = (req,res)=> {
-    
-    let idlog = req.params.idlog;
-    let id = req.params.idsettore;
-
-    const strsql = strSql + ' where `logsettores`.`idLogistica` = ' + idlog + ' and `logsettores`.`id` = ' + id;
-
-    console.log('backend - getbySettore - strsql --> ' + strsql);
-  
-   // let strsql = `select * from logsettores where id= ${id} `;    originale
-
-    db.query(strsql,(err,result)=> {
-        if(err) {
-            console.log(err,'2gh errore il lettura logsettores for idlog ' + idlog + '  e id ' + id);
-
-            res.status(500).send({
-                message: `2 errore il lettura logsettores for idlog ${idlog} e id ${id} - errore: ${err}`,
-                rc: 'kk',
-                data:null
-            });
-            return;
-        }
-        
-        if(result.length>0) {
-            console.log(`rilevata ${result.length}  ------------------------   evento `)
-
-            res.status(200).send({ 
-                message:`situazione attuale per logfila idlog ${idlog} e id ${id}`,
-                rc: 'ok',
-                data:result[0]
-            });                    
-        }else {
-            console.log(`nessun record presente per idlog ${idlog} e id ${id} `);
-            res.status(200).send({
-                message: `nessun record presente for idlog ${idlog} e id ${id}`,
-                rc: 'nf',
-                data:null
-            });
-        }
-
-    });  
-}
-
-
-
-exports.getbySettoreAct = (req,res)=> {
-    
-    let idlog = req.params.idlog;
-    let stato = req.params.stato;
-
-    const strsql = strSql + ' where `logsettores`.`idLogistica` = ' + idlog + ' and `logsettores`.`stato` = ' + stato;
-
-    console.log('backend - getbySettoreAct - strsql --> ' + strsql);
-  
-   // let strsql = `select * from logsettores where id= ${id} `;    originale
-
-    db.query(strsql,(err,result)=> {
-        if(err) {
-            console.log(err,'42gh errore il lettura logsettores for idlog ' + idlog + '  e stato' + stato);
-
-            res.status(500).send({
-                message: `2 errore il lettura logsettores for idlog ${idlog} e stato ${stato} - errore: ${err}`,
-                rc: 'kk',
-                data:null
-            });
-            return;
-        }
-        
-        if(result.length>0) {
-            console.log(`rilevata ${result.length}  ------------------------   evento `)
-
-            res.status(200).send({ 
-                message:`situazione attuale per logsettori idlog ${idlog} e stato ${stato}`,
-                rc: 'ok',
-                data:result
-            });                    
-        }else {
-            console.log(`nessun record presente per idlog ${idlog} e stato ${stato} `);
-            res.status(200).send({
-                message: `nessun record presente for idlog ${idlog} e stato ${stato}`,
-                rc: 'nf',
-                data:null
-            });
-        }
-
-    });  
-}
 

@@ -20,13 +20,15 @@ router.get('/' , [authjwt.verifyToken], manifestaziones.getAll);
 // lettura singolo utente
 router.get('/:id'  , manifestaziones.getbyid);
 
-router.get('/getbystato/:stato' , manifestaziones.getbystato);   // , [authjwt.verifyToken]
+router.get('/getbystato/:stato', [authjwt.verifyToken] , manifestaziones.getbystato);   // 
+
+router.get('/getActive/active/:stato', [authjwt.verifyToken] , manifestaziones.getActive); 
 
 
 // creazione nuovo utente
-router.post('/create',  manifestaziones.createNew);   // [authjwt.verifyToken] ,
+router.post('/create', [authjwt.verifyToken],  manifestaziones.createNew);   // [authjwt.verifyToken] ,
 // aggiornamento utente  
-router.put('/updatebyid/:id' , manifestaziones.updateByid);
+router.put('/updatebyid/:id', [authjwt.verifyToken] , manifestaziones.updateByid);
 // cancellazione utente
 router.delete('/deletebyid/:id', [authjwt.verifyToken] , manifestaziones.delete);
 

@@ -85,8 +85,9 @@ db.logsettore = require("./models/logsettore.js")(sequelize, Sequelize);
 db.logfila = require("./models/logfila.js")(sequelize, Sequelize);
 db.logsettfilaposti = require("./models/logsettfilaposti.js")(sequelize, Sequelize);
 db.eventosettfilaposti = require("./models/eventosettfilaposti.js")(sequelize, Sequelize);
-
-
+db.eventoposto = require("./models/eventoposto.js")(sequelize, Sequelize);
+db.message = require("./models/message.js")(sequelize, Sequelize);
+db.biglietto = require("./models/biglietto.js")(sequelize, Sequelize);
 
 // work
 db.elemento = require("./models/elemento.js")(sequelize, Sequelize);

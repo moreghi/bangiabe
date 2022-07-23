@@ -492,3 +492,48 @@ db.query(strsql,(err,result)=> {
 
 }
 
+// lettura singola Manifestazione
+exports.getActive = (req,res)=> {
+    
+    const stato = req.params.stato;
+    
+    let strsql = strSql + ' where `manifestaziones`.`stato` = ' + stato;
+
+    console.log('backend - getActive - strsql --> ' + strsql);
+  
+   // let strsql = `select * from users where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,'3 errore il lettura manifestaziones attiva');
+
+            res.status(500).send({
+                message: `3 errore il lettura manifestaziones attiva --  errore: ${err}`,
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevate ${result.length}  ------------------------   manifestazioni `);
+
+            res.status(200).send({ 
+                message:`situazione attuale manifestazione attiva`,
+                number:  result.length,
+                rc: 'ok',
+                data:result[0]
+            });                    
+        }else {
+            console.log(`nessuna manifestazione attiva presente `);
+            res.status(200).send({
+                message: `nessuna manifestazione attiva presente`,
+                number:  result.length,
+                rc: 'nf',
+                data:result
+            });
+        }
+
+    });  
+}
+
+

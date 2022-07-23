@@ -25,6 +25,8 @@ router.delete('/deletebyid/:id', [authjwt.verifyToken], logsettore.delete);
 
 // lettura per logistica-Settore
 router.get('/getbySettore/:idlog/:idsettore' , [authjwt.verifyToken], logsettore.getbySettore);
+// lettura per logistica-Settori attivi
+router.get('/getbySettoreAct/:idlog/:stato' , [authjwt.verifyToken], logsettore.getbySettoreAct);
 
 
 module.exports = router;

@@ -29,6 +29,13 @@ const logsettoreRouter = require('./routers/logsettores');
 const logfilaRouter = require('./routers/logfilas');
 const logfilapostiRouter = require('./routers/logfilapostis');
 const eventosettfilapostiRouter = require('./routers/eventosettfilapostis');
+const eventopostoRouter = require('./routers/eventopostos');
+const messageRouter = require('./routers/messages');
+
+const prenoteventoNConfirmRouter = require('./routers/prenoteventoNConfirm');
+const prenotazeventoRouter = require('./routers/prenotazevento');
+const bigliettoRouter = require('./routers/biglietto');
+
 
 
 // ---------------------------------------------------  importo le rotte  -- tabelle correlate
@@ -96,6 +103,11 @@ app.use('/logsettore', logsettoreRouter);
 app.use('/logfila', logfilaRouter);
 app.use('/logfilaposti', logfilapostiRouter);
 app.use('/eventosettfilaposti', eventosettfilapostiRouter);
+app.use('/eventoposto', eventopostoRouter);
+app.use('/message', messageRouter);
+app.use('/prenoteventoNConfirm', prenoteventoNConfirmRouter);
+app.use('/prenotazevento', prenotazeventoRouter);
+app.use('/biglietto', bigliettoRouter);
 
 
 

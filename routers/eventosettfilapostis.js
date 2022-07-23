@@ -29,5 +29,15 @@ router.get('/getbyevento/:id', [authjwt.verifyToken] , eventosettfila.getbyevent
 // conteggio per settore/fila
 router.get('/count/:id', [authjwt.verifyToken] , eventosettfila.getCountbysettfila);
 
+// lettura eventi per sett-fila
+router.get('/getbyevento/SettFila/:id/:sett/:fila', [authjwt.verifyToken] , eventosettfila.getbyeventoSettFila);    // 
+
+// lettura settori liberi per evento
+router.get('/getbyevento/Settori/:id', [authjwt.verifyToken] , eventosettfila.getbyIdEventoSettori); 
+
+// lettura file libere per settore selezionato
+router.get('/getbyevento/File/:id/:idsett', [authjwt.verifyToken] , eventosettfila.getbyIdEventofileofSettore); 
 
 module.exports = router;
+
+
