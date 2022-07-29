@@ -32,6 +32,8 @@ router.get('/getbyActive/Act', [authjwt.verifyToken] , evento.getAllActive);    
 // lettura ultimo evento
 router.get('/lastid/last', [authjwt.verifyToken] , evento.getlastid);    // 
 
+// lettura eventi Attivi della manifestazione
+router.get('/getbymanif/Active/:id', [authjwt.verifyToken] , evento.getActivebymanif);    // 
 
 module.exports = router;
 

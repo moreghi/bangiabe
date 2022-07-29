@@ -6,7 +6,7 @@ const salt = bcrypt.genSaltSync(10);
 const nodemailer = require('nodemailer');
 const sendEmail = require('./../helpers/send-email');
 
-const strSql = "select `prenotazeventos`.*, `t_stato_prenotazeventos`.`d_stato_prenotazione evento`  from  `prenotazeventos` " + 
+const strSql = "select `prenotazeventos`.*, `t_stato_prenotazeventos`.`d_stato_prenotazione`  from  `prenotazeventos` " + 
                " inner join `t_stato_prenotazeventos` ON `t_stato_prenotazeventos`.`id` = `prenotazeventos`.`idstato` " 
 
 // ------   ok  nuova modalità di craere strsql  
@@ -157,6 +157,7 @@ exports.createNew = (req,res)=> {
     let idfila = req.body.idfila;
     let idposto = req.body.idposto;
     let idtipobiglietto = req.body.idtipobiglietto;
+    let idbiglietto = req.body.idbiglietto;
     let datapren = req.body.datapren;
     let persone = req.body.persone;
     let email = req.body.email;
@@ -174,6 +175,7 @@ exports.createNew = (req,res)=> {
                     idfila = ${idfila},
                     idposto = ${idposto},
                     idtipobiglietto = ${idtipobiglietto},
+                    idbiglietto = ${idbiglietto},
                     datapren = '${datapren}',
                     persone = ${persone},
                     email = '${email}',
@@ -537,6 +539,53 @@ async function send_gmmailfor_prenotazioneeventoConfermata(sendto,cognome,nome, 
                            ${message}`
                 });
     }
+
+
+    exports.getPrenotazinibyevento = (req,res)=> {
+
+        console.log('backend -----------------------------  getPrenotazinidaEvaderebyevento ' + req.params.idevento);
+        
+        let idevento = req.params.idevento;
+      
+        let strsql = '';
+      
+        strsql =  strSql + ' where idevento = ' + idevento;  
+        console.log(`strsql:  ${strsql} `);
+        db.query(strsql,(err,result)=> {
+            if(err) {
+               res.status(500).send({
+                    message: `3x errore il lettura all prenotazeventos per evento - erro: ${err}`,
+                    data:null
+                });
+                return;
+            }
+            if(result.length>0) {
+                console.log('xxx - lettura tutti gli prenotazioni evento per id' + result.length);  
+    
+                console.log(`rilevate ${result.length} prenotazioni evento `)
+                res.status(200).send({ 
+                    message:'Situazione attuale prenotazioni evento',
+                    number:  result.length,
+                    rc: 'ok',
+                    data:result
+                });                    
+            }else {
+                console.log('nessun record presente ' + result.length); 
+    
+                res.status(200).send({ 
+                    message: `nessuna prenotazione evento presente !! `,
+                    number:  result.length,
+                    rc: 'nf',
+                    data:null
+                });                    
+            }
+    
+        });
+    
+    }
+
+    
+
 
 
     /*

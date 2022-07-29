@@ -149,6 +149,8 @@ exports.createNew = (req,res)=> {
     let importo = req.body.importo;
     let ntot = req.body.ntot;
     let serie = req.body.serie;
+    let ultimoemesso = req.body.ultimoemesso;
+    let key_utenti_operation = req.body.key_utenti_operation;
     
     let strsql =  `update t_tipo_bigliettos set
                     idtipotaglia = ${idtipotaglia},
@@ -156,7 +158,8 @@ exports.createNew = (req,res)=> {
                     idevento = ${idevento},
                     importo = ${importo},
                     ntot = ${ntot},
-                    serie =' ${serie}',
+                    serie = '${serie}',
+                    ultimoemesso = ${ultimoemesso},
                     key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 

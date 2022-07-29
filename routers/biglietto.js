@@ -23,4 +23,8 @@ router.put('/updatebyid/:id', [authjwt.verifyToken], biglietto.updateByid);
 // cancellazione utente
 router.delete('/deletebyid/:id', [authjwt.verifyToken], biglietto.delete);
 
+// router.get('/', [authjwt.verifyToken] , biglietto.getAllbiglietto);
+router.get('/last/lastid' , [authjwt.verifyToken], biglietto.getlastId);
+
 module.exports = router;
+

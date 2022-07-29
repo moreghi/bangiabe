@@ -52,6 +52,8 @@ router.post('/confirmedeventoL', prenotazeventonormal.confirmedprenotazionelogis
 // invio email per conferma di gruppo a registrazioni singole
 router.get('/getbyconfirmedpren/sendmail/:email/:cognome/:nome/:keyuserpren/:devento/:dataev', prenotazeventonormal.invioemailconfirmedprenotazionelogistica); 
 
+// lettura di tutte le prenotazioni da confermare fatte per evento con logistica (con gestione utente master)
+router.get('/getAllbytokencodpre/:token/:codpren' , prenotazeventonormal.getAllbytokencodpre);
 
 module.exports = router;
     

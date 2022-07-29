@@ -111,6 +111,7 @@ exports.createNew = (req,res)=> {
       let settore = req.body.settore;
       let fila = req.body.fila;
       let posto = req.body.posto;
+      let modpag = req.body.modpag;
       let key_utenti_operation = req.body.key_utenti_operation;
     
 
@@ -118,10 +119,10 @@ exports.createNew = (req,res)=> {
 
 
       let strsql =  `insert into bigliettos
-                  (evento,idprenotazione,stato,tipo,numero,cognome,nome,email,cellulare,datapre,dataconf,dataemi,settore,fila,posto,key_utenti_operation) 
+                  (evento,idprenotazione,stato,tipo,numero,cognome,nome,email,cellulare,datapre,dataconf,dataemi,settore,fila,posto,modpag,key_utenti_operation) 
                   valueS
                   (
-                    ${evento},${idprenotazione},${stato},${tipo},${numero},UPPER('${cognome}'),UPPER('${nome}'),'${email}','${cellulare}','${datapre}','${dataconf}','${dataemi}',${settore},${fila},${posto},${key_utenti_operation} 
+                    ${evento},${idprenotazione},${stato},${tipo},${numero},UPPER('${cognome}'),UPPER('${nome}'),'${email}','${cellulare}','${datapre}','${dataconf}','${dataemi}',${settore},${fila},${posto},${modpag},${key_utenti_operation} 
                   )`;
       
     
@@ -174,6 +175,7 @@ exports.createNew = (req,res)=> {
     let settore = req.body.settore;
     let fila = req.body.fila;
     let posto = req.body.posto;
+    let modpag = req.body.modpag;
     let key_utenti_operation = req.body.key_utenti_operation;
     
     let strsql =  `update bigliettos set
@@ -192,6 +194,7 @@ exports.createNew = (req,res)=> {
                     settore = ${settore},
                     fila = ${fila},
                     posto = ${posto},
+                    modpag = ${modpag},
                     key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
 
@@ -367,3 +370,45 @@ exports.delete = (req,res)=> {
 
 }  
 
+
+exports.getlastId = (req,res)=> {
+    
+    let id = 9999;
+    
+    const strsql = 'select `bigliettos`.* FROM `bigliettos` where `bigliettos`.`id` < ' + id + ' order by `bigliettos`.`id` desc';
+
+    console.log('backend - getlastId - strsql --> ' + strsql);
+  
+   // let strsql = `select * from bigliettos where id= ${id} `;    originale
+
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,'2 errore il lettura bigliettos getlastId ' + id);
+
+            res.status(500).send({
+                message: `2 errore il lettura bigliettos getlastId - errore: ${err}`,
+                rc: 'kk',
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log(`rilevata ${result.length}  -------------- lastid `)
+            console.log('ultimo id ' + result[0].id);
+            res.status(200).send({ 
+                message:`situazione attuale per getlastId ultimo numero rilevato: ${result[0].id}`,
+                rc: 'ok',
+                data:result[0]
+            });                    
+        }else {
+            console.log(`nessun record presente`);
+            res.status(200).send({
+                message: `nessun evento presente `,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}

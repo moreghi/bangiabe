@@ -481,3 +481,44 @@ exports.getlastid = (req,res)=> {
 
     });  
 }
+
+
+exports.getActivebymanif = (req,res)=> {
+ 
+    let id = req.params.id;
+    let stato = 1;
+
+    const strsql = strSql + ' where `eventos`.`idmanif` = ' + id + ' and `eventos`.`stato` = ' + stato;
+
+    console.log('getbymanif - strsql: ' + strsql);
+      
+    db.query(strsql,(err,result)=> {
+        if(err) {
+           res.status(500).send({
+                message: `3fhttf errore il lettura all eventos - erro: ${err}`,
+                data:null
+            });
+            return;
+        }
+        if(result.length>0) {
+            console.log('lettura tutti gli eventi attivi della manifestazione ' + result.length);  
+
+            console.log(`rilevati ${result.length} eventi Attivi`)
+            res.status(200).send({ 
+                message:'Situazione attuale ',
+                rc: 'ok',
+                number:  result.length,
+                data:result
+            });                    
+        }else {
+            console.log('nessun record presente ' + result.length); 
+
+            res.status(200).send({ 
+                message: `nessun evento presente `,
+                rc: 'nf',
+                data:null
+            });                    
+        }
+
+    });
+}

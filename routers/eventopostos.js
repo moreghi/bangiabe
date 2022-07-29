@@ -34,6 +34,9 @@ router.get('/getbyevento/SettFila/:id/:idSett/:idFila', [authjwt.verifyToken] , 
 router.get('/getbyevento/SettFilaActive/:id/:idSett/:idFila', [authjwt.verifyToken] , eventoposto.getbyIdEventoSettFilaActive);    // 
 // lettura posti per codice prenotazione
 router.get('/getbyevento/keyuserpren/:keyuserpren', [authjwt.verifyToken] , eventoposto.getbykeyuserpren);    // 
+
+// lettura posti per settore/fila/posto
+router.get('/settfilaposto/:id/:idSett/:idFila/:posto', [authjwt.verifyToken] , eventoposto.getbyIdEventoSettFilaposto);    // 
      
 module.exports = router;
 

@@ -1,4 +1,4 @@
-const express = require('express');
+{const express = require('express');
 const router = express.Router();
 // middleware per controllo token
 const authjwt  = require('../middleware/authJwt');    
@@ -29,4 +29,4 @@ router.get('/getbyevento/:id', [authjwt.verifyToken] , tipobiglietto.getbyevento
 // lettura taglia per evento
 router.get('/getbytaglia/:id/:idtaglia', [authjwt.verifyToken] , tipobiglietto.getbytaglia);    
 
-module.exports = router;
+module.exports = router;}

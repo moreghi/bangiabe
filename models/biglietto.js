@@ -75,6 +75,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         underscored: 0
       },
+      modpag: {
+        type: Sequelize.INTEGER,
+        underscored: 0
+      },
       key_utenti_operation: {
         type: Sequelize.INTEGER,
         underscored: 0

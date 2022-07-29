@@ -90,7 +90,7 @@ exports.getbyid = (req,res)=> {
 exports.createNew = (req,res)=> {
     
       console.log(req.body,'..........................................   Creazione nuovo evento');  // visualizzo la struttura dei campi immessi dall'evento 
-  
+
       // creo le variabili dai campi di input
       let idEvento = req.body.idEvento;
       let keyuserpren = req.body.keyuserpren;
@@ -100,7 +100,7 @@ exports.createNew = (req,res)=> {
       let cognome = req.body.cognome;
       let nome = req.body.nome;
       let cellulare = req.body.cellulare;
-      let email = req.body.email;  
+      let email = req.body.email;
       let key_utenti_operation = req.body.key_utenti_operation;
           console.log('backend ------------ eventoposto-------------------- Creazione nuovo evento ' + req.body.data );
 
@@ -108,10 +108,10 @@ exports.createNew = (req,res)=> {
                   (idEvento,keyuserpren,idSettore,idFila,idPosto,cognome,nome,cellulare,email,key_utenti_operation) 
                   valueS
                   (
-                    ${idEvento},'${keyuserpren}',${idSettore},${idFila},${idPosto},'${cognome}','${nome}','${cellulare}','${email}',${key_utenti_operation} 
+                    ${idEvento},'${keyuserpren}',${idSettore},${idFila},${idPosto},UPPER('${cognome}'),UPPER('${nome}'),'${cellulare}',LOWER('${email}'),${key_utenti_operation} 
                   )`;
       
-    
+                 
       db.query(strsql,(err,result) => {
           if(err) {
               console.log(err,'errore in registrazione nuovo posto su tabella eventopostos ');
@@ -146,9 +146,12 @@ exports.createNew = (req,res)=> {
 
     // definisco le variabili per aggiornamento campi
 
+  
+    
    
     let stato = req.body.stato;
     let keyuserpren = req.body.keyuserpren;
+    let idlogistica = req.body.idlogistica;
     let idEvento = req.body.idEvento;
     let idSettore = req.body.idSettore;
     let idFila = req.body.idFila;
@@ -156,21 +159,24 @@ exports.createNew = (req,res)=> {
     let cognome = req.body.cognome;
     let nome = req.body.nome;
     let cellulare = req.body.cellulare;
-    let email = req.body.email;  
+    let email = req.body.email; 
+    let tipobiglietto = req.body.tipobiglietto; 
     let idbiglietto = req.body.idbiglietto;
     let key_utenti_operation = req.body.key_utenti_operation;
     
     let strsql =  `update eventopostos set
                     stato = ${stato},
                     keyuserpren = '${keyuserpren}',
+                    idlogistica = ${idlogistica},
                     idEvento = ${idEvento},
                     idSettore = ${idSettore},
                     idFila = ${idFila},
                     idPosto = ${idPosto},
-                    cognome = '${cognome}',
-                    nome = '${nome}', 
+                    cognome = UPPER('${cognome}'),
+                    nome =  UPPER('${nome}'), 
                     cellulare = '${cellulare}',
-                    email = '${email}',
+                    email =  LOWER('${email}'),
+                    tipobiglietto = ${tipobiglietto},
                     idbiglietto = ${idbiglietto},
                     key_utenti_operation = ${key_utenti_operation}
                     where id = ${id}`;
@@ -359,7 +365,7 @@ exports.getbyevento = (req,res)=> {
     db.query(strsql,(err,result)=> {
         if(err) {
            res.status(500).send({
-                message: `3ff errore il lettura all eventopostos - erro: ${err}`,
+                message: `3ffss errore il lettura all eventopostos - erro: ${err}`,
                 data:null
             });
             return;
@@ -393,14 +399,14 @@ exports.getbyStato = (req,res)=> {
     let id = req.params.id;
     let stato = req.params.stato;
 
-    const strsql = strSql + ' where `eventopostos`.`idEvento` = ' + id + ' `eventopostos`.`stato` = ' + stato;
+    const strsql = strSql + ' where `eventopostos`.`idEvento` = ' + id + ' and `eventopostos`.`stato` = ' + stato;
 
     console.log('getbyStato - strsql: ' + strsql);
       
     db.query(strsql,(err,result)=> {
         if(err) {
            res.status(500).send({
-                message: `3ff errore il lettura all eventopostos - erro: ${err}`,
+                message: `3ffdf errore il lettura all eventopostos - erro: ${err}`,
                 data:null
             });
             return;
@@ -539,6 +545,49 @@ exports.getbykeyuserpren = (req,res)=> {
                 rc: 'ok',
                 number:  result.length,
                 data:result
+            });                    
+        }else {
+            console.log('nessun record presente ' + result.length); 
+
+            res.status(200).send({ 
+                message: `nessun evento presente `,
+                rc: 'nf',
+                data:null
+            });                    
+        }
+
+    });
+}
+
+exports.getbyIdEventoSettFilaposto = (req,res)=> {
+ 
+    let id = req.params.id;
+    let idSett = req.params.idSett;
+    let idFila = req.params.idFila;
+    let posto = req.params.posto;
+
+
+    const strsql = strSql + ' where `eventopostos`.`idEvento` = ' + id + ' and `eventopostos`.`idSettore` = ' + idSett + '  and  `eventopostos`.`idFila` = ' + idFila + '  and  `eventopostos`.`idPosto` = ' + posto;
+
+    console.log('getbyIdEventoSettFila - strsql: ' + strsql);
+      
+    db.query(strsql,(err,result)=> {
+        if(err) {
+           res.status(500).send({
+                message: `3ff errore il lettura all eventopostos per settore - fila/posto - erro: ${err}`,
+                data:null
+            });
+            return;
+        }
+        if(result.length>0) {
+            console.log('lettura tutti i posti per settore e fila/posto ' + result.length);  
+
+            console.log(`rilevati ${result.length} posti `)
+            res.status(200).send({ 
+                message:'Situazione attuale ',
+                rc: 'ok',
+                number:  result.length,
+                data:result[0]
             });                    
         }else {
             console.log('nessun record presente ' + result.length); 

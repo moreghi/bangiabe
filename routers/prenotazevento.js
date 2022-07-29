@@ -35,5 +35,8 @@ router.get('/pren/getPrenotazionibyemail/:email'  , prenotazeventos.getPrenotazi
 // invio email dopo conferma prenotazione
 router.post('/pren/invioemailprenotazione/:email' , prenotazeventos.sendmailprenconfirmed);    //
 
+// ricerca prenotazione per evento
+router.get('/pren/getbyevento/evento/:idevento', prenotazeventos.getPrenotazinibyevento);
 
 module.exports = router;
+

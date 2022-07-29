@@ -88,6 +88,7 @@ db.eventosettfilaposti = require("./models/eventosettfilaposti.js")(sequelize, S
 db.eventoposto = require("./models/eventoposto.js")(sequelize, Sequelize);
 db.message = require("./models/message.js")(sequelize, Sequelize);
 db.biglietto = require("./models/biglietto.js")(sequelize, Sequelize);
+db.prenotazeventomaster = require("./models/prenotazeventomasterConfirm.js")(sequelize, Sequelize);
 
 // work
 db.elemento = require("./models/elemento.js")(sequelize, Sequelize);
@@ -103,7 +104,7 @@ db.ttagliabiglietto = require("./models/t-taglia-biglietto.js")(sequelize, Seque
 db.tstatotagliabiglietto = require("./models/t-stato-taglia-biglietto.js")(sequelize, Sequelize);
 db.tstatologistica = require("./models/t-stato-logistica.js")(sequelize, Sequelize);
 db.ttipologistica = require("./models/t-tipo-logistica.js")(sequelize, Sequelize);
-
+db.tstatobiglietto = require("./models/t-stato-biglietto.js")(sequelize, Sequelize);
 
 //  ----------------------------------------------------------------------------- relazioni tra tabelle
 // relazione tra Users e Truolo

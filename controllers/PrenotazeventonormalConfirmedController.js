@@ -51,6 +51,7 @@ exports.getAll = (req,res)=> {
     });
 }
 
+
 // lettura singolo conferma prenotazione
 // ------   ok  nuova modalità di craere strsql  
 exports.getbyemail = (req,res)=> {
@@ -114,7 +115,7 @@ exports.createNew = (req,res)=> {
                   (cognome,nome,email,telefono,password,idevento,idtipobiglietto,datapren,persone,token,codpren) 
                   valueS
                   (
-                     '${cognome}','${nome}','${email}','${telefono}','${password}',${idevento},${idtipobiglietto},'${datapren}',${persone},'${token}','${codpren}' 
+                    UPPER('${cognome}'),UPPER('${nome}'),LOWER('${email}'),'${telefono}','${password}',${idevento},${idtipobiglietto},'${datapren}',${persone},'${token}','${codpren}' 
                   )`;
       
     
@@ -163,8 +164,8 @@ exports.createNew = (req,res)=> {
     let codpren = req.body.codpren;
 
     let strsql =  `update prenotazevento_confirmeds set
-                    cognome = '${cognome}',
-                    nome = '${nome}',
+                    cognome = UPPER('${cognome}'),
+                    nome = UPPER('${nome}'),
                     telefono = '${telefono}',
                     password = '${password}',
                     idevento = ${idevento},
@@ -220,15 +221,6 @@ exports.createNew = (req,res)=> {
 }  
 
 
-
-
-
-
-
-
-
-
-
 exports.updateByid = (req,res)=> {  
 
     let id = req.params.id;
@@ -253,8 +245,8 @@ exports.updateByid = (req,res)=> {
     let codpren = req.body.codpren;
 
     let strsql =  `update prenotazevento_confirmeds set
-                    cognome = '${cognome}',
-                    nome = '${nome}',
+                    cognome = UPPER('${cognome}'),
+                    nome = UPPER('${nome}'),
                     telefono = '${telefono}',
                     password = '${password}',
                     idevento = ${idevento},
@@ -509,6 +501,59 @@ exports.getbytokencodpre = (req,res)=> {
 
     });  
 }
+
+
+
+exports.getAllbytokencodpre = (req,res)=> {
+
+    // prenotazioni evento in logistica con selezione posto !!  ce ne possono essere molte
+    
+    let token = req.params.token;
+    let codpren = req.params.codpren;
+      
+   // const strsql = strSql + " where `prenotazevento_confirmeds`.`token` = '" + token + "' and  `prenotazevento_confirmeds`.`codpren` = '" + codpren + "' ";                           ";
+
+
+    const where = " where `prenotazevento_confirmeds`.`token` = '" + token + "' and `prenotazevento_confirmeds`.`codpren` = '" + codpren + "' ";
+    const strsql = strSql + where;
+
+    console.log('backend - getAllbytokencodpre - strsql --> ' + strsql);
+    db.query(strsql,(err,result)=> {
+        if(err) {
+            console.log(err,'2gh errore il lettura conferma prenotazione for token ' + token + ' e codpren ' + codpren);
+
+            res.status(500).send({
+                message: `2gh errore il lettura conferma prenotazione for token ${token} e codpren ${codpren} - errore: ${err}`,
+                data:null
+            });
+            return;
+        }
+        
+        if(result.length>0) {
+            console.log('rilevate ' + result.length + '  ----   conferme prenotazioni ' + JSON.stringify(result));
+
+            res.status(200).send({ 
+                message:`situazione attuale per conferma prenotazione token: .....  ${token} e codpren ${codpren}`,
+                rc: 'ok',
+                data:result
+            });                    
+        }else {
+            console.log(`nessun record presente per token: ${token} e codpren ${codpren}`);
+            res.status(200).send({
+                message: `nessuna conferma prenotazione presente for token: ${token} e codpre ${codpren}`,
+                rc: 'nf',
+                data:null
+            });
+        }
+
+    });  
+}
+
+
+
+
+
+
 
 exports.getbyemaildatapre = (req,res)=> {
     
@@ -911,36 +956,38 @@ exports.confirmedprenotazionelogistica  = (req,res)=> {
 
     console.log('parametri Passati : ' + JSON.stringify(req.body));   
    
-    const codprenx =  randomcodprenString();
-    const token = randomTokenString();
+    // il codice pren è uguale per tutti le registrazioni di gruppo ed è passata nel body
+    //const codprenx =  randomcodprenString();
+    //const token = randomTokenString();
 
     let descrevento = '';
 
-    let cognome = req.body.cognome;
-    let nome = req.body.nome;
-    let email = req.body.email;
-    let telefono = req.body.telefono;
-    let idevento = req.body.idevento;
-    let idlogistica = req.body.idlogistica;
-    let idsettore = req.body.idsettore;
-    let idfila = req.body.idfila;
-    let idposto = req.body.idposto;
-    let idtipobiglietto = req.body.idtipobiglietto;
-    let data1 = req.body.datapren; 
+     let cognome = req.body.cognome;
+     let nome = req.body.nome;
+     let email = req.body.email;
+     let telefono = req.body.telefono;
+     let idevento = req.body.idevento;
+     let idlogistica = req.body.idlogistica;
+     let idsettore = req.body.idsettore;
+     let idfila = req.body.idfila;
+     let idposto = req.body.idposto;
+     let idtipobiglietto = req.body.idtipobiglietto;
+     let data1 = req.body.datapren; 
     //  la data arriva gia nel formato dd/mm/aaaa
-    let persone = req.body.persone;
-    let codpren = codprenx.substring(0, 5);
+     let persone = req.body.persone;
+     let codpren = req.body.codpren;
+     let token = req.body.token;
     
-    console.log(`   lunghezza di token criptato                 ${token.length} bytes of random data: ${token.toString('base64')}`);
+   //  console.log(`   lunghezza di token criptato                 ${token.length} bytes of random data: ${token.toString('base64')}`);
 
     try{
     
 
       let strsql =  `insert into prenotazevento_confirmeds
-                (cognome,nome,email,telefono,idevento,idlogistica,idsettore,idfila,idposto,datapren,persone,codpren,token,idtipobiglietto) 
+                (cognome,nome,email,telefono,idevento,idlogistica,idsettore,idfila,idposto,idtipobiglietto,datapren,persone,codpren,token) 
                 valueS
                 (
-                  '${cognome}','${nome}','${email}','${telefono}',${idevento},${idlogistica},${idsettore},${idfila},${idposto},'${data1}',${persone},'${codpren}','${token}',${idtipobiglietto} 
+                  '${cognome}','${nome}','${email}','${telefono}',${idevento},${idlogistica},${idsettore},${idfila},${idposto},${idtipobiglietto},'${data1}',${persone},'${codpren}','${token}' 
                 )`;
 
         console.log('--- strsql pronta per fare insert:  ' + strsql );        
@@ -1025,6 +1072,7 @@ exports.invioemailconfirmedprenotazionelogistica  = (req,res)=> {
         rc: 'ok',
         codpren: codpren,
         token: token,
+        keyuserpren: keyuserpren,
         data: null
         });
     }catch(error){

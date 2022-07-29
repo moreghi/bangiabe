@@ -35,7 +35,9 @@ const messageRouter = require('./routers/messages');
 const prenoteventoNConfirmRouter = require('./routers/prenoteventoNConfirm');
 const prenotazeventoRouter = require('./routers/prenotazevento');
 const bigliettoRouter = require('./routers/biglietto');
-
+const prenotazeventomasterConfirmRouter = require('./routers/prenotazeventomasterConfirm');
+const cassaRouter = require('./routers/cassa');
+const cassamovRouter = require('./routers/cassamov');
 
 
 // ---------------------------------------------------  importo le rotte  -- tabelle correlate
@@ -47,7 +49,8 @@ const tagliabigliettoRouter = require('./routers/t_taglia_bigliettos')
 const statotagliabigliettoRouter = require('./routers/t_stato_taglia_bigliettos')
 const statologisticaRouter = require('./routers/t_stato_logisticas')
 const tipologisticaRouter = require('./routers/t_tipo_logisticas')
-
+const statobigliettoRouter = require('./routers/t_stato_bigliettos')
+const tipopagamentoRouter = require('./routers/t_tipo_pagamentos')
 
 
 
@@ -71,7 +74,7 @@ var corsOptions = {
 // per il deploy su heroku o altro hosting   2022/04/06
 /*
  var corsOptions = {
-  origin: "https://siffe.vercel.app"             
+  origin: "https://bandieragialla.ghisellinimoreno.it"             
  };
 */
 
@@ -108,9 +111,9 @@ app.use('/message', messageRouter);
 app.use('/prenoteventoNConfirm', prenoteventoNConfirmRouter);
 app.use('/prenotazevento', prenotazeventoRouter);
 app.use('/biglietto', bigliettoRouter);
-
-
-
+app.use('/prenotazeventomasterConfirm', prenotazeventomasterConfirmRouter);
+app.use('/cassa', cassaRouter);
+app.use('/cassamov', cassamovRouter);
 
 // tabelle correlate
 app.use('/truolo', ruoloRouter);
@@ -121,6 +124,9 @@ app.use('/ttagliabiglietto', tagliabigliettoRouter);
 app.use('/tstatotagliabiglietto', statotagliabigliettoRouter);
 app.use('/tstatologistica', statologisticaRouter);
 app.use('/ttipologistica', tipologisticaRouter);
+app.use('/tstatobiglietto', statobigliettoRouter);
+app.use('/ttipopagamento', tipopagamentoRouter);
+
 
 
 
