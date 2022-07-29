@@ -1,8 +1,8 @@
 {
     
     "host": "localhost",
-    "user": "root",
-    "password": "moreno01",
+    "user": "moreno",
+    "password": "Moreno01@",
     "database":"bangia",
     "port":3306,
     "dialect": "mysql",

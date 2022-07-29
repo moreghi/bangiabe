@@ -4,7 +4,7 @@ const cors = require('cors');
 const mysql = require('mysql2');
 
 // porta per mysql
-const ports = process.env.PORT || 3001; 
+const ports = process.env.PORT || 3000; 
 
 global.__basedir = __dirname;
 
@@ -62,26 +62,16 @@ const elementoRouter = require('./routers/elementos')
 const imageRouter = require('./routers/images');
 
 
-
-// per ambiente di sviluppo su localhost
+// per il deploy su heroku o altro hosting   2022/04/06
 
 var corsOptions = {
-    origin: "http://localhost:4210"             
+  origin: "https://bandieragialla.ghisellinimoreno.it"
+  // origin: "http://localhost:4210"         
  };
-
-
-
-// per il deploy su heroku o altro hosting   2022/04/06
-/*
- var corsOptions = {
-  origin: "https://bandieragialla.ghisellinimoreno.it"             
- };
-*/
 
 const app = express();
 // utilizzo i pacchetti
 app.use(cors(corsOptions));
-// app.use(cors());                // originale
 app.use(bodyparser.json());
 app.use(express.json());
 
