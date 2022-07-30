@@ -66,7 +66,7 @@ const imageRouter = require('./routers/images');
 
 var corsOptions = {
   origin: "https://bandieragialla.ghisellinimoreno.it"
-  // origin: "http://localhost:4210"         
+ //  origin: "http://localhost:4210"         
  };
 
 const app = express();
